@@ -32,6 +32,7 @@ public class CheckableLinearLayout extends LinearLayout implements Checkable {
     private void processAttrs(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CheckableLinearLayout);
         this.mSpecifiedId = a.getResourceId(R.styleable.CheckableLinearLayout_checkable_id, -1);
+        a.recycle();
     }
 
     @Override
