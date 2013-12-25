@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.programus.android.clipblacklist.widget.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.programus.android.clipblacklist"
     android:id="@+id/ListRowLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal" >
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal"
+    app:checkable_id="@+id/rowContent" >
 
     <Switch
         android:id="@+id/rowEnabled"
@@ -14,11 +17,11 @@
         android:checked="false" />
 
     <CheckedTextView
-        android:id="@+id/rowContent"
+        android:id="@id/rowContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple" />
 
-</LinearLayout>
+</org.programus.android.clipblacklist.widget.CheckableLinearLayout>
