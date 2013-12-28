@@ -8,30 +8,30 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Checkable;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-public class CheckableLinearLayout extends LinearLayout implements Checkable {
+public class CheckableRelativeLayout extends RelativeLayout implements Checkable {
     private int mSpecifiedId = -1;
     private Checkable mCheckableCtrl;
     private boolean mChecked;
 
-    public CheckableLinearLayout(Context context, AttributeSet attrs, int defStyle) {
+    public CheckableRelativeLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         this.processAttrs(context, attrs);
     }
 
-    public CheckableLinearLayout(Context context, AttributeSet attrs) {
+    public CheckableRelativeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.processAttrs(context, attrs);
     }
 
-    public CheckableLinearLayout(Context context) {
+    public CheckableRelativeLayout(Context context) {
         super(context);
     }
     
     private void processAttrs(Context context, AttributeSet attrs) {
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CheckableLinearLayout);
-        this.mSpecifiedId = a.getResourceId(R.styleable.CheckableLinearLayout_checkable_id, -1);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CheckableRelativeLayout);
+        this.mSpecifiedId = a.getResourceId(R.styleable.CheckableRelativeLayout_checkable_id, -1);
         a.recycle();
     }
 

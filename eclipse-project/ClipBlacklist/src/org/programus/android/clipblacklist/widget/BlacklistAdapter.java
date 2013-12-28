@@ -47,7 +47,7 @@ public class BlacklistAdapter extends ArrayAdapter<BlacklistItem> {
         ViewHolder holder = (ViewHolder) rowView.getTag();
         BlacklistItem item = this.getItem(position);
         holder.mmText.setText(item.getContent());
-        holder.mmSwitch.setChecked(item.isEnabeld());
+        holder.mmSwitch.setChecked(item.isEnabled());
         
         return rowView;
     }

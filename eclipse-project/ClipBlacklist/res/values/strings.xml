@@ -9,5 +9,9 @@
     <string name="action_off">OFF</string>
     <string name="action_delete">Delete</string>
     <string name="action_edit">Edit</string>
+    <string name="prompt_add_item">Please add the contents that you never want to see in clipboard here.</string>
+    <string name="action_sel_all">Select All</string>
+    <string name="dialog_prompt">Please input the clipboard blacklist content:</string>
+    <string name="dialog_item_enabled_prompt">Prevent the content be copied into clipboard</string>
 
 </resources>
