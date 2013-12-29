@@ -115,19 +115,6 @@ public class ClipMonitorService extends Service {
             }
         }
         Log.d(this.getClass().getName(), "saved clip: " + cd);
-        Log.d(this.getClass().getName(), "saved: " + strFromByteArray(data));
-    }
-    
-    private String strFromByteArray(byte[] data) {
-        StringBuilder sb = new StringBuilder();
-        for (byte b : data) {
-            int n = 0xff & b;
-            if (n < 0x10) {
-                sb.append('0');
-            }
-            sb.append(Integer.toHexString(n));
-        }
-        return sb.toString();
     }
     
     private ClipData loadClipData() {
@@ -143,7 +130,6 @@ public class ClipMonitorService extends Service {
             }
             out.flush();
             byte[] data = out.toByteArray();
-            Log.d(this.getClass().getName(), "loaded: " + strFromByteArray(data));
             parcel.unmarshall(data, 0, data.length);
             parcel.setDataPosition(0);
             cd = ClipData.CREATOR.createFromParcel(parcel);
