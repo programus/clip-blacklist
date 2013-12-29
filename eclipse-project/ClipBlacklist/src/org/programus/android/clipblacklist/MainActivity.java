@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.programus.android.clipblacklist.data.BlacklistItem;
 import org.programus.android.clipblacklist.dialog.ItemEditDialog;
+import org.programus.android.clipblacklist.service.ClipMonitorService;
 import org.programus.android.clipblacklist.widget.BlacklistAdapter;
 
 import android.app.DialogFragment;
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
@@ -117,6 +119,8 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
                 this.mmPrevCheckedCount = checkedCount;
             }
         });
+        
+        this.startMonitorService();
     }
     
     /**
@@ -139,6 +143,12 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
         
         return list;
     }
+    
+    private void startMonitorService() {
+        Intent intent = new Intent(this, ClipMonitorService.class);
+        intent.putExtra(ClipMonitorService.KEY_FLAG, ClipMonitorService.FLAG_REFRESH_BLACKLIST);
+        this.startService(intent);
+    }
 
     private void loadContents() {
         loadBlacklist(this, this.mContents);
@@ -153,6 +163,7 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
             item.save(editor, String.format(KEY_LIST_FORMAT, i++));
         }
         editor.apply();
+        this.startMonitorService();
     }
     
     private interface CheckedItemCallback {
