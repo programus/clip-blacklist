@@ -8,9 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:gravity="top"
+        android:gravity="bottom"
         android:inputType="textMultiLine"
-        android:lines="@integer/dialog_content_def_line" >
+        android:minLines="@integer/dialog_content_def_line" >
 
         <requestFocus />
     </EditText>

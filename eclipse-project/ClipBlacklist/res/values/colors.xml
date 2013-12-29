@@ -2,5 +2,8 @@
 <resources>
     <color name="title_background_color">#ff8800</color>
     <color name="tab_background_color">#000</color>
-    
+    <color name="list_checked_background_color">#b8e0ee</color>
+    <color name="list_pressed_background_color">#59c1e8</color>
+    <color name="list_normal_background_color">#ddd</color>
+    <color name="cab_background_color">#d73</color>
 </resources>

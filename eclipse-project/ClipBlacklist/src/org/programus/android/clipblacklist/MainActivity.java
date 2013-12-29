@@ -1,7 +1,6 @@
 package org.programus.android.clipblacklist;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.programus.android.clipblacklist.data.BlacklistItem;
@@ -10,17 +9,33 @@ import org.programus.android.clipblacklist.widget.BlacklistAdapter;
 
 import android.app.DialogFragment;
 import android.app.ListActivity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
+/**
+ * The Main Setting Activity.
+ * @author programus
+ *
+ */
 public class MainActivity extends ListActivity implements ItemEditDialog.FinishedEditCallback {
+    
+    /**
+     * the name for the {@link SharedPreferences}.
+     */
+    public final static String PREFS_NAME = "org.programus.android.clipblacklist.Preferences";
+    private final static String KEY_LIST_COUNT = "blacklist.count";
+    private final static String KEY_LIST_FORMAT = "blacklist.item(%d)";
     
     private List<BlacklistItem> mContents = new ArrayList<BlacklistItem>();
     private BlacklistAdapter mAdapter;
@@ -35,6 +50,13 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
 
         final ListView listView = this.getListView();
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        
+        listView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                promptEditItem(position);
+            }
+        });
         
         listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
             private int mmPrevCheckedCount;
@@ -96,21 +118,41 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
             }
         });
     }
+    
+    /**
+     * Load the black list from {@link SharedPreferences}.
+     * @param context
+     * @param list the list you want to reuse. It will be cleared before fill the contents.
+     * @return the black list. It will be the same instance as the list you specified if any or a new {@link ArrayList} instance. 
+     */
+    public static List<BlacklistItem> loadBlacklist(final Context context, List<BlacklistItem> list) {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int count = settings.getInt(KEY_LIST_COUNT, 0);
+        if (list == null) {
+            list = new ArrayList<BlacklistItem>(count);
+        } else {
+            list.clear();
+        }
+        for (int i = 0; i < count; i++) {
+            list.add(BlacklistItem.loadInstance(settings, String.format(KEY_LIST_FORMAT, i)));
+        }
+        
+        return list;
+    }
 
     private void loadContents() {
-        this.mContents.clear();
-        for (char c = 0x20; c < 0x7f; c++) {
-            char[] l = new char[5];
-            Arrays.fill(l, c);
-            BlacklistItem item = new BlacklistItem();
-            item.setContent(new String(l));
-            item.setEnabled(c % 3 == 0);
-            this.mContents.add(item);
-        }
+        loadBlacklist(this, this.mContents);
     }
     
     private void saveContents() {
-        
+        SharedPreferences settings = this.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(KEY_LIST_COUNT, this.mContents.size());
+        int i = 0;
+        for (BlacklistItem item : this.mContents) {
+            item.save(editor, String.format(KEY_LIST_FORMAT, i++));
+        }
+        editor.apply();
     }
     
     private interface CheckedItemCallback {
@@ -139,6 +181,7 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
         if (appendNew) {
             this.mContents.add(item);
         }
+        this.saveContents();
         this.mAdapter.notifyDataSetChanged();
     }
     
@@ -199,5 +242,17 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
             processed = false;
         }
         return processed;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.saveContents();
+    }
+
+    @Override
+    protected void onResume() {
+        this.loadContents();
+        super.onResume();
     }
 }

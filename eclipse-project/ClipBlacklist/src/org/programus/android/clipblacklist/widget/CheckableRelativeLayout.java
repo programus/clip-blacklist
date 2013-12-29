@@ -10,29 +10,67 @@ import android.view.ViewGroup;
 import android.widget.Checkable;
 import android.widget.RelativeLayout;
 
+/**
+ * A checkable layout to hold checkable widgets.
+ * @author programus
+ *
+ */
 public class CheckableRelativeLayout extends RelativeLayout implements Checkable {
+    private final static int[] STATE_CHECKED_SET = {android.R.attr.state_checked};
     private int mSpecifiedId = -1;
     private Checkable mCheckableCtrl;
     private boolean mChecked;
 
-    public CheckableRelativeLayout(Context context, AttributeSet attrs, int defStyle) {
+    /**
+     * Constructor.
+     * @param context
+     * @param attrs
+     * @param defStyle
+     */
+    public CheckableRelativeLayout(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
+        this.addStatesFromChildren();
         this.processAttrs(context, attrs);
     }
 
-    public CheckableRelativeLayout(Context context, AttributeSet attrs) {
+    /**
+     * Constructor.
+     * @param context
+     * @param attrs
+     */
+    public CheckableRelativeLayout(final Context context, final AttributeSet attrs) {
         super(context, attrs);
+        this.addStatesFromChildren();
         this.processAttrs(context, attrs);
     }
 
-    public CheckableRelativeLayout(Context context) {
+    /**
+     * Constructor.
+     * @param context
+     */
+    public CheckableRelativeLayout(final Context context) {
         super(context);
+        this.addStatesFromChildren();
     }
     
     private void processAttrs(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CheckableRelativeLayout);
         this.mSpecifiedId = a.getResourceId(R.styleable.CheckableRelativeLayout_checkable_id, -1);
+        this.mChecked = a.getBoolean(R.styleable.CheckableRelativeLayout_checked, false);
         a.recycle();
+    }
+
+    @Override
+    protected int[] onCreateDrawableState(int extraSpace) {
+        int[] drawableState = null;
+        if (this.isChecked()) {
+            drawableState = super.onCreateDrawableState(extraSpace + 1);
+            mergeDrawableStates(drawableState, STATE_CHECKED_SET);
+        } else {
+            drawableState = super.onCreateDrawableState(extraSpace);
+        }
+        
+        return drawableState;
     }
 
     @Override
@@ -42,9 +80,12 @@ public class CheckableRelativeLayout extends RelativeLayout implements Checkable
 
     @Override
     public void setChecked(boolean checked) {
-        this.mChecked = checked;
-        if (this.mCheckableCtrl != null) {
-            this.mCheckableCtrl.setChecked(checked);
+        if (this.mChecked != checked) {
+            this.mChecked = checked;
+            this.refreshDrawableState();
+            if (this.mCheckableCtrl != null) {
+                this.mCheckableCtrl.setChecked(checked);
+            }
         }
     }
 

@@ -4,6 +4,7 @@
     android:id="@+id/ListRowLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/checked_list_selector"
     android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal"
     app:checkable_id="@+id/rowContent" >
@@ -12,6 +13,7 @@
         android:id="@+id/rowEnabled"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
         android:checked="false" />
@@ -22,6 +24,13 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_gravity="center_vertical"
-        android:layout_toRightOf="@id/rowEnabled"
-        android:checkMark="?android:attr/listChoiceIndicatorMultiple" />
+        android:layout_toLeftOf="@id/rowEnabled"
+        android:ellipsize="end"
+        android:maxHeight="@dimen/list_row_height"
+        android:maxLines="@integer/list_content_max_lines"
+        android:minHeight="@dimen/list_row_height"
+        android:minLines="@integer/list_content_max_lines"
+        android:paddingLeft="@dimen/list_text_padding"
+        android:textSize="@dimen/list_content_textsize" />
+
 </org.programus.android.clipblacklist.widget.CheckableRelativeLayout>

@@ -2,5 +2,6 @@
 <resources>
     <declare-styleable name="CheckableRelativeLayout">
         <attr name="checkable_id" format="reference" />
+        <attr name="checked" format="boolean" />
     </declare-styleable>
 </resources>
