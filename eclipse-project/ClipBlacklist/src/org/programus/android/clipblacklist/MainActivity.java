@@ -8,9 +8,13 @@ import org.programus.android.clipblacklist.dialog.ItemEditDialog;
 import org.programus.android.clipblacklist.service.ClipMonitorService;
 import org.programus.android.clipblacklist.widget.BlacklistAdapter;
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.ListActivity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,6 +28,7 @@ import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * The Main Setting Activity.
@@ -39,8 +44,11 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
     private final static String KEY_LIST_COUNT = "blacklist.count";
     private final static String KEY_LIST_FORMAT = "blacklist.item(%d)";
     
+    private final static String[] EMPTY_STR_ARRAY = new String[0];
+    
     private List<BlacklistItem> mContents = new ArrayList<BlacklistItem>();
     private BlacklistAdapter mAdapter;
+    private ClipboardManager mClipboardManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,8 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
         this.loadContents();
         mAdapter = new BlacklistAdapter(this, this.mContents);
         this.setListAdapter(mAdapter);
+        
+        this.mClipboardManager = (ClipboardManager) this.getSystemService(CLIPBOARD_SERVICE);
 
         final ListView listView = this.getListView();
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -170,6 +180,84 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
         public void process(List<BlacklistItem> contents, int position);
     }
     
+    private void addBlacklistItem() {
+    	if (this.hasClip()) {
+    		this.selectAdd();
+    	} else {
+    		this.promptEditItem(-1);
+    	}
+    }
+    
+    private void selectAdd() {
+    	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    	builder
+    		.setTitle(R.string.new_item_prompt)
+    		.setItems(R.array.new_item_array, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					boolean clear = false;
+					switch (which) {
+					case 0:
+						clear = true;
+					case 1:
+						addCurrentClipboardIntoList(clear);
+						break;
+					case 2:
+					default:
+						promptEditItem(-1);
+						break;
+					}
+				}
+			});
+    	builder.create().show();
+    }
+    
+    private boolean hasClip() {
+    	boolean ret = false;
+    	ClipData cd = this.mClipboardManager.getPrimaryClip();
+    	if (cd != null && cd.getItemCount() > 0) {
+    		ClipData.Item item = cd.getItemAt(0);
+    		ret = 
+    				item.getText() != null ||
+    				item.getHtmlText() != null ||
+    				item.getUri() != null ||
+    				item.getIntent() != null;
+    	}
+    	
+    	return ret;
+    }
+    
+    private void addCurrentClipboardIntoList(boolean clear) {
+    	ClipboardManager cm = (ClipboardManager) this.getSystemService(CLIPBOARD_SERVICE);
+    	ClipData cd = cm.getPrimaryClip();
+    	if (this.hasClip()) {
+    		this.addClipDataIntoList(cd);
+    		this.mAdapter.notifyDataSetChanged();
+    		if (clear) {
+	    		this.clearClipboard();
+    		}
+    	} else {
+    		Toast.makeText(this, R.string.no_clip, Toast.LENGTH_LONG).show();
+    		this.promptEditItem(-1);
+    	}
+    }
+    
+    private void addClipDataIntoList(ClipData cd) {
+    	if (cd.getItemCount() > 0) {
+    		ClipData.Item item = cd.getItemAt(0);
+    		CharSequence cs = item.coerceToText(this);
+    		if (cs != null) {
+    			this.mContents.add(new BlacklistItem(cs.toString(), true));
+    		}
+    	}
+    }
+    
+    private void clearClipboard() {
+    	ClipData.Item item = new ClipData.Item((String)null);
+    	ClipData cd = new ClipData(null, EMPTY_STR_ARRAY, item);
+    	this.mClipboardManager.setPrimaryClip(cd);
+    }
+    
     private void promptEditItem(final int position) {
         BlacklistItem item = position >= 0 ? this.mContents.get(position) : null;
         ItemEditDialog dialog = ItemEditDialog.newInstance(item);
@@ -247,7 +335,7 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
         int id = item.getItemId();
         switch (id) {
         case R.id.action_add:
-            this.promptEditItem(-1);
+        	this.addBlacklistItem();
             break;
         default:
             processed = false;

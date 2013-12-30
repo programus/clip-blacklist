@@ -2,6 +2,9 @@ package org.programus.android.clipblacklist.data;
 
 import java.io.Serializable;
 
+import org.programus.android.clipblacklist.util.ClipDataHelper;
+
+import android.content.ClipData;
 import android.content.SharedPreferences;
 
 /**
@@ -12,11 +15,15 @@ import android.content.SharedPreferences;
 public class BlacklistItem implements Serializable {
     private static final long serialVersionUID = -4100928148072568582L;
 
+    private final static String SAVE_KEY_RAW = "%s.BlacklistItem.raw";
     private final static String SAVE_KEY_CONTENT = "%s.BlacklistItem.content";
     private final static String SAVE_KEY_ENABLED = "%s.BlacklistItem.enabled";
 
+    private ClipData rawContent;
     private String content;
     private boolean enabled;
+    
+    private String rawCache;
     
     /**
      * Default constructor
@@ -32,7 +39,29 @@ public class BlacklistItem implements Serializable {
         this.content = content;
         this.enabled = enabled;
     }
+    
     /**
+     * Return the raw {#link ClipData} instance.
+     * @return the raw{#link ClipData} instance
+     */
+    public ClipData getRawContent() {
+		return rawContent;
+	}
+    
+    public String getRawContentAsString() {
+    	return rawCache;
+    }
+
+    /**
+     * Set the raw {#link ClipData} instance
+     * @param rawContent the raw {#link ClipData} instance
+     */
+	public void setRawContent(ClipData rawContent) {
+		this.rawContent = rawContent;
+		this.rawCache = ClipDataHelper.stringFromClipData(rawContent).toString();
+	}
+
+	/**
      * Return the content
      * @return the content
      */
@@ -69,6 +98,7 @@ public class BlacklistItem implements Serializable {
     public void save(final SharedPreferences.Editor editor, final String key) {
         editor.putBoolean(String.format(SAVE_KEY_ENABLED, key), this.enabled);
         editor.putString(String.format(SAVE_KEY_CONTENT, key), content);
+        editor.putString(String.format(SAVE_KEY_RAW, key), this.rawCache);
     }
     
     /**
@@ -79,6 +109,8 @@ public class BlacklistItem implements Serializable {
     public void load(final SharedPreferences pref, final String key) {
         this.enabled = pref.getBoolean(String.format(SAVE_KEY_ENABLED, key), false);
         this.content = pref.getString(String.format(SAVE_KEY_CONTENT, key), null);
+        this.rawCache = pref.getString(String.format(SAVE_KEY_RAW, key), null);
+        this.rawContent = ClipDataHelper.clipDataFromString(rawCache);
     }
     
     /**

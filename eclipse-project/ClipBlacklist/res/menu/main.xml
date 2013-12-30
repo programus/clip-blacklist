@@ -1,10 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="collapseActionView"
-        android:title="@string/action_settings"/>
     <item android:id="@+id/action_add" android:orderInCategory="10" android:title="@string/action_add" android:showAsAction="ifRoom" android:icon="@drawable/ic_action_new"></item>
     <item android:id="@+id/action_view_log" android:title="@string/action_view_log" android:showAsAction="ifRoom" android:orderInCategory="50" android:icon="@drawable/ic_action_event"></item>
 

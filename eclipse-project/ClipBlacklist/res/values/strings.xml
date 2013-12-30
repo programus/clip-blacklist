@@ -13,5 +13,10 @@
     <string name="action_sel_all">Select All</string>
     <string name="dialog_prompt">Please input the clipboard blacklist content:</string>
     <string name="dialog_item_enabled_prompt">Prevent the content be copied into clipboard</string>
+    <string name="new_item_from_clipboard">using the current clipboard content and CLEAR clipboard</string>
+    <string name="new_item_from_clipboard_remain" >using the current clipboard content but remain it</string><string name="new_item_input">inputing content manually</string>
+    <string name="new_item_prompt">Add a new item into blacklist by</string>
+    <string name="no_clip">Clipboard is empty.</string>
+    
 
 </resources>

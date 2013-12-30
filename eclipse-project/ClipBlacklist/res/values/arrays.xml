@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="new_item_array">
+        <item>@string/new_item_from_clipboard</item>
+        <item >@string/new_item_from_clipboard_remain</item><item >@string/new_item_input</item>
+        
+    </string-array>
+    
+</resources>
