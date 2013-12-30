@@ -200,6 +200,7 @@ public class ClipMonitorService extends Service {
         if (intent != null) {
             flag = intent.getIntExtra(KEY_FLAG, FLAG_BOOT);
         }
+        Log.d(this.getClass().getName(), "Service started: " + flag);
         switch (flag) {
         case FLAG_BOOT:
         case FLAG_REFRESH_BLACKLIST:

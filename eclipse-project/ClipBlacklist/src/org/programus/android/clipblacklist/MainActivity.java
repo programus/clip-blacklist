@@ -6,6 +6,7 @@ import java.util.List;
 import org.programus.android.clipblacklist.data.BlacklistItem;
 import org.programus.android.clipblacklist.dialog.ItemEditDialog;
 import org.programus.android.clipblacklist.service.ClipMonitorService;
+import org.programus.android.clipblacklist.util.ClipDataHelper;
 import org.programus.android.clipblacklist.widget.BlacklistAdapter;
 
 import android.app.AlertDialog;
@@ -17,7 +18,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -156,7 +159,6 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
     
     private void startMonitorService() {
         Intent intent = new Intent(this, ClipMonitorService.class);
-        intent.putExtra(ClipMonitorService.KEY_FLAG, ClipMonitorService.FLAG_REFRESH_BLACKLIST);
         this.startService(intent);
     }
 

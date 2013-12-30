@@ -197,37 +197,34 @@ public class ClipDataHelper {
 	}
 	
 	private static void appendUri(StringBuilder sb, Uri uri) {
-		if (uri != null) {
-			append(sb, 
-					uri.getScheme(), 
-					uri.getSchemeSpecificPart(),
-					uri.getFragment());
-		} else {
-			append(sb, (String) null);
-		}
+	    append(sb, uri == null ? null : uri.toString());
 	}
 	
 	private static Uri uriFromString(StringBuilder s) {
-		List<CharSequence> parts = extract(s, 3);
-		Uri uri = parts.size() < 3 ? null : 
-			Uri.fromParts(
-				parts.get(0).toString(), 
-				parts.get(1).toString(), 
-				parts.get(2).toString());
+	    String str = toString(extract(s));
+	    Uri uri = str == null ? null : Uri.parse(str);
 		return uri;
 	}
 	
 	private static void appendIntent(StringBuilder sb, Intent intent) {
-		String uri = intent == null ? null : intent.toUri(Intent.URI_INTENT_SCHEME);
-		append(sb, uri);
+	    if (intent != null) {
+            String uri = intent.toUri(Intent.URI_INTENT_SCHEME);
+            String action = intent.getAction();
+            append(sb, "intent", action, uri);
+	    } else {
+	        append(sb, (String) null);
+	    }
 	}
 	
 	private static Intent intentFromString(StringBuilder s) {
-		CharSequence uri = extract(s);
+		CharSequence prefix = extract(s);
 		Intent intent = null;
-		if (uri != null) {
+		if (prefix != null) {
 			try {
-				intent = Intent.parseUri(uri.toString(), Intent.URI_INTENT_SCHEME);
+			    String action = toString(extract(s));
+			    String uri = toString(extract(s));
+				intent = Intent.parseUri(uri, Intent.URI_INTENT_SCHEME);
+				intent.setAction(action);
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
