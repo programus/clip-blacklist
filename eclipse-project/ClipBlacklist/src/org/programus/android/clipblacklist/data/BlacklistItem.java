@@ -5,7 +5,9 @@ import java.io.Serializable;
 import org.programus.android.clipblacklist.util.ClipDataHelper;
 
 import android.content.ClipData;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 
 /**
  * A class to store the data in the blacklist.
@@ -18,6 +20,8 @@ public class BlacklistItem implements Serializable {
     private final static String SAVE_KEY_RAW = "%s.BlacklistItem.raw";
     private final static String SAVE_KEY_CONTENT = "%s.BlacklistItem.content";
     private final static String SAVE_KEY_ENABLED = "%s.BlacklistItem.enabled";
+    
+    public final static String TYPE_COERCE_TEXT = "CoerceText";
 
     private ClipData rawContent;
     private String content;
@@ -32,12 +36,30 @@ public class BlacklistItem implements Serializable {
 
     /**
      * Constructor
-     * @param content the content to block from clipboard
-     * @param enabled enable this item
+     * @param content
+     * @param enabled
      */
     public BlacklistItem(final String content, final boolean enabled) {
         this.content = content;
         this.enabled = enabled;
+    }
+    
+    /**
+     * Constructor
+     * @param clip
+     * @param enabled
+     */
+    public BlacklistItem(final ClipData clip, final boolean enabled) {
+    	this.setRawContent(clip);
+    	this.setEnabled(enabled);
+    }
+    
+    /**
+     * 
+     * @param enabled
+     */
+    public BlacklistItem(final boolean enabled) {
+    	this((ClipData) null, enabled);
     }
     
     /**
@@ -61,6 +83,9 @@ public class BlacklistItem implements Serializable {
 		this.rawCache = ClipDataHelper.stringFromClipData(rawContent).toString();
 	}
 
+	public boolean isCoerceText() {
+		return this.rawContent == null || this.content != null;
+	}
 	/**
      * Return the content
      * @return the content
@@ -88,6 +113,34 @@ public class BlacklistItem implements Serializable {
      */
     public void setEnabled(final boolean enabled) {
         this.enabled = enabled;
+    }
+    
+    public String getTypes() {
+    	return this.isCoerceText() ? TYPE_COERCE_TEXT : ClipDataHelper.getTypeString(ClipDataHelper.getItemTypes(this.getRawContent().getItemAt(0)));
+    }
+    
+    public String getDiaplayText() {
+    	String ret = null;
+    	if (this.isCoerceText()) {
+    		ret = this.getContent();
+    	} else {
+    		ClipData.Item item = this.rawContent.getItemAt(0);
+    		CharSequence text = item.getText();
+    		String html = item.getHtmlText();
+    		Intent intent = item.getIntent();
+    		Uri uri = item.getUri();
+    		if (intent != null) {
+    			ret = intent.toUri(Intent.URI_INTENT_SCHEME);
+    		} else if (uri != null) {
+    			ret = uri.toString();
+    		} else if (html != null) {
+    			ret = html;
+    		} else if (text != null) {
+    			ret = text.toString();
+    		}
+    	}
+    	
+    	return ret;
     }
     
     /**

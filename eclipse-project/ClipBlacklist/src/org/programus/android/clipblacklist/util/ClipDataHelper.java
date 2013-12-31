@@ -1,8 +1,6 @@
 package org.programus.android.clipblacklist.util;
 
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -19,6 +17,49 @@ public class ClipDataHelper {
 	private final static int FLAG_NULL = -1;
 	
 	private final static int FLAG_INT = -2;
+	
+    private final static String[] EMPTY_STR_ARRAY = new String[0];
+
+	private static ClipData emptyClip;
+	
+	public final static int ITEM_TYPE_TEXT = 1;
+	public final static int ITEM_TYPE_HTML = 1 << 1;
+	public final static int ITEM_TYPE_URI = 1 << 2;
+	public final static int ITEM_TYPE_INTENT = 1 << 3;
+	
+	public final static String TYPE_TEXT = "TXT";
+	public final static String TYPE_HTML = "HTML";
+	public final static String TYPE_URI = "URI";
+	public final static String TYPE_INTENT = "INTENT";
+	
+	public static int getItemTypes(ClipData.Item item) {
+		int types = 0;
+		if (item.getText() != null) {
+			types |= ITEM_TYPE_TEXT;
+		}
+		if (item.getHtmlText() != null) {
+			types |= ITEM_TYPE_HTML;
+		}
+		if (item.getUri() != null) {
+			types |= ITEM_TYPE_URI;
+		}
+		if (item.getIntent() != null) {
+			types |= ITEM_TYPE_INTENT;
+		}
+		
+		return types;
+	}
+	
+	public static String getTypeString(int types) {
+		String[] typeStrings = {TYPE_TEXT, TYPE_HTML, TYPE_URI, TYPE_INTENT};
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < typeStrings.length; i++) {
+			if (((types >>> i) & 0x01) == 1) {
+				sb.append(typeStrings[i]).append(' ');
+			}
+		}
+		return sb.toString();
+	}
 	
 	public static String hexStringFromInt(int i, int minWidth) {
 		final int len = 8;
@@ -43,7 +84,7 @@ public class ClipDataHelper {
 		return n;
 	}
 	
-	private static String toString(CharSequence cs) {
+	public static String toString(CharSequence cs) {
 		return cs == null ? null : cs.toString();
 	}
 	
@@ -93,18 +134,12 @@ public class ClipDataHelper {
 		return ret;
 	}
 	
-	private static List<CharSequence> extract(StringBuilder data, int limit) {
-		List<CharSequence> ret = new ArrayList<CharSequence>();
-		if (limit < 0) {
-			limit = Integer.MAX_VALUE;
+	public static ClipData getEmptyClipData() {
+		if (emptyClip == null) {
+	    	ClipData.Item item = new ClipData.Item((String)null);
+	    	emptyClip = new ClipData(null, EMPTY_STR_ARRAY, item);
 		}
-		CharSequence tmp = null;
-		for (int i = 0; i < limit && data.length() > 0; i++) {
-			tmp = extract(data);
-			ret.add(tmp);
-		}
-		
-		return ret;
+		return emptyClip;
 	}
 	
 	public static CharSequence stringFromClipData(ClipData clip) {

@@ -62,7 +62,7 @@ public class ItemEditDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Bundle args = this.getArguments();
         final boolean appendNew = args == null || !args.containsKey(KEY_ITEM);
-        this.mItem = !appendNew ? (BlacklistItem) args.getSerializable(KEY_ITEM) : new BlacklistItem(null, true);
+        this.mItem = !appendNew ? (BlacklistItem) args.getSerializable(KEY_ITEM) : new BlacklistItem(true);
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
         LayoutInflater inflater = this.getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit, null);

@@ -18,19 +18,30 @@
         android:layout_gravity="center_vertical"
         android:checked="false" />
 
-    <CheckedTextView
-        android:id="@id/rowContent"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_gravity="center_vertical"
         android:layout_toLeftOf="@id/rowEnabled"
-        android:ellipsize="end"
-        android:maxHeight="@dimen/list_row_height"
-        android:maxLines="@integer/list_content_max_lines"
-        android:minHeight="@dimen/list_row_height"
-        android:minLines="@integer/list_content_max_lines"
-        android:paddingLeft="@dimen/list_text_padding"
-        android:textSize="@dimen/list_content_textsize" />
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/rowType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <CheckedTextView
+            android:id="@id/rowContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxHeight="@dimen/list_row_height"
+            android:maxLines="@integer/list_content_max_lines"
+            android:minHeight="@dimen/list_row_height"
+            android:minLines="@integer/list_content_max_lines"
+            android:paddingLeft="@dimen/list_text_padding"
+            android:textSize="@dimen/list_content_textsize" />
+
+    </LinearLayout>
 
 </org.programus.android.clipblacklist.widget.CheckableRelativeLayout>

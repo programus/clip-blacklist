@@ -18,9 +18,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -46,8 +44,6 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
     public final static String PREFS_NAME = "org.programus.android.clipblacklist.Preferences";
     private final static String KEY_LIST_COUNT = "blacklist.count";
     private final static String KEY_LIST_FORMAT = "blacklist.item(%d)";
-    
-    private final static String[] EMPTY_STR_ARRAY = new String[0];
     
     private List<BlacklistItem> mContents = new ArrayList<BlacklistItem>();
     private BlacklistAdapter mAdapter;
@@ -159,6 +155,7 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
     
     private void startMonitorService() {
         Intent intent = new Intent(this, ClipMonitorService.class);
+        intent.putExtra(ClipMonitorService.KEY_FLAG, ClipMonitorService.FLAG_REFRESH_BLACKLIST);
         this.startService(intent);
     }
 
@@ -247,17 +244,13 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
     private void addClipDataIntoList(ClipData cd) {
     	if (cd.getItemCount() > 0) {
     		ClipData.Item item = cd.getItemAt(0);
-    		CharSequence cs = item.coerceToText(this);
-    		if (cs != null) {
-    			this.mContents.add(new BlacklistItem(cs.toString(), true));
-    		}
+    		ClipData store = new ClipData(cd.getDescription(), item);
+			this.mContents.add(new BlacklistItem(store, true));
     	}
     }
     
     private void clearClipboard() {
-    	ClipData.Item item = new ClipData.Item((String)null);
-    	ClipData cd = new ClipData(null, EMPTY_STR_ARRAY, item);
-    	this.mClipboardManager.setPrimaryClip(cd);
+    	this.mClipboardManager.setPrimaryClip(ClipDataHelper.getEmptyClipData());
     }
     
     private void promptEditItem(final int position) {

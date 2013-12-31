@@ -1,15 +1,17 @@
 package org.programus.android.clipblacklist.service;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.programus.android.clipblacklist.MainActivity;
 import org.programus.android.clipblacklist.data.BlacklistItem;
+import org.programus.android.clipblacklist.util.ClipDataHelper;
+import org.programus.android.clipblacklist.util.Comparator;
 
 import android.app.Notification;
 import android.app.Service;
@@ -18,7 +20,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.os.Parcel;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -28,12 +29,15 @@ public class ClipMonitorService extends Service {
     public final static int FLAG_REFRESH_BLACKLIST = 1;
 
     private final static String FILE_NAME = "ClipboardBlacklist.Clip";
+    private final static String CHARSET = "UTF-8";
     private ClipboardManager mClipManager;
     private static int notificationId = 5;
 	/** a notification to keep the service alive when task manager try to kill it */
     private static Notification notification;
     private List<BlacklistItem> blacklist; 
-    boolean monitoring = false;
+    private boolean monitoring = false;
+    
+    private ClipData prevCd;
 
     private ClipboardManager.OnPrimaryClipChangedListener clipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
         @Override
@@ -44,11 +48,14 @@ public class ClipMonitorService extends Service {
             ClipboardManager cm = getClipboardManager();
             ClipData cd = cm.getPrimaryClip();
             if (isBlackClip(cd, blacklist)) {
-                ClipData prevCd = loadClipData();
+            	if (prevCd == null) {
+	                prevCd = loadClipData();
+            	}
                 Log.d(this.getClass().getName(), "loaded prev clip:" + prevCd.getItemCount());
                 cm.setPrimaryClip(prevCd);
                 Log.d(this.getClass().getName(), "replaced clip");
             } else {
+            	prevCd = cd;
                 saveClipData(cd);
             }
         }
@@ -78,33 +85,46 @@ public class ClipMonitorService extends Service {
         boolean ret = false;
         ClipData.Item item = cd.getItemAt(0);
         if (item != null) {
-            CharSequence cs = item.coerceToText(getApplicationContext());
-            if (cs != null) {
-                String content = cs.toString();
-                for (BlacklistItem bi : list) {
-                    if (bi.isEnabled() && content.equals(bi.getContent())) {
-                        ret = true;
-                        break;
-                    }
-                }
-            }
+        	for (BlacklistItem bi : list) {
+        		if (bi.isEnabled()) {
+        			if (bi.isCoerceText()) {
+        				CharSequence cs = item.coerceToText(getApplicationContext());
+        				if (cs != null && cs.toString().equals(bi.getContent())) {
+        					ret = true;
+        					break;
+        				}
+        			} else if (Comparator.approxEquals(bi.getRawContent(), cd)){
+        				ret = true;
+        				break;
+        			}
+        		}
+        	}
         }
         return ret;
     }
     
+    private void saveCurrent() {
+    	ClipboardManager cm = this.getClipboardManager();
+    	ClipData cd = cm.getPrimaryClip();
+    	if (this.isBlackClip(cd, blacklist)) {
+    		cd = ClipDataHelper.getEmptyClipData();
+    	}
+		this.saveClipData(cd);
+		this.prevCd = cd;
+    }
+    
     private void saveClipData(ClipData cd) {
-        Parcel parcel = Parcel.obtain();
-        cd.writeToParcel(parcel, 0);
-        byte[] data = parcel.marshall();
-        FileOutputStream out = null;
-        try {
-            out = this.openFileOutput(FILE_NAME, MODE_PRIVATE);
-            out.write(data);
-            out.flush();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+    	OutputStreamWriter out = null;
+    	try {
+			out = new OutputStreamWriter(this.openFileOutput(FILE_NAME, MODE_PRIVATE), CHARSET);
+			out.write(ClipDataHelper.toString(ClipDataHelper.stringFromClipData(cd)));
+			out.flush();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
         } finally {
             if (out != null) {
                 try {
@@ -113,39 +133,52 @@ public class ClipMonitorService extends Service {
                     e.printStackTrace();
                 }
             }
-        }
+		}
         Log.d(this.getClass().getName(), "saved clip: " + cd);
     }
     
+//    private void saveClipDataParcel(ClipData cd) {
+//        Parcel parcel = Parcel.obtain();
+//        cd.writeToParcel(parcel, 0);
+//        byte[] data = parcel.marshall();
+//        FileOutputStream out = null;
+//        try {
+//            out = this.openFileOutput(FILE_NAME, MODE_PRIVATE);
+//            out.write(data);
+//            out.flush();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (out != null) {
+//                try {
+//                    out.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+    
     private ClipData loadClipData() {
-        ClipData cd = null;
-        FileInputStream in = null;
-        ByteArrayOutputStream out = null;
-        try {
-            in = this.openFileInput(FILE_NAME);
-            Parcel parcel = Parcel.obtain();
-            out = new ByteArrayOutputStream(in.available());
-            for (int n = in.read(); n >= 0; n = in.read()) {
-                out.write(n);
-            }
-            out.flush();
-            byte[] data = out.toByteArray();
-            parcel.unmarshall(data, 0, data.length);
-            parcel.setDataPosition(0);
-            cd = ClipData.CREATOR.createFromParcel(parcel);
-            parcel.recycle();
-        } catch (FileNotFoundException e) {
+    	ClipData cd = null;
+    	InputStreamReader in = null;
+    	try {
+			in = new InputStreamReader(this.openFileInput(FILE_NAME), CHARSET);
+			StringBuilder sb = new StringBuilder();
+			char[] buffer = new char[4096];
+			for (int n = in.read(buffer); n >= 0; n = in.read(buffer)) {
+				sb.append(buffer, 0, n);
+			}
+			cd = ClipDataHelper.clipDataFromString(sb);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
             Log.w(this.getClass().getName(), "Clip data storing file does not exist.");
-        } catch (IOException e) {
-            e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
         } finally {
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
             if (in != null) {
                 try {
                     in.close();
@@ -153,12 +186,53 @@ public class ClipMonitorService extends Service {
                     e.printStackTrace();
                 }
             }
-        }
-        
-        Log.d(this.getClass().getName(), "loaded clip data: " + cd);
-        
-        return cd == null ? ClipData.newPlainText("", "") : cd;
+		}
+    	
+    	return cd == null ? ClipDataHelper.getEmptyClipData() : cd;
     }
+    
+//    private ClipData loadClipDataParcel() {
+//        ClipData cd = null;
+//        FileInputStream in = null;
+//        ByteArrayOutputStream out = null;
+//        try {
+//            in = this.openFileInput(FILE_NAME);
+//            Parcel parcel = Parcel.obtain();
+//            out = new ByteArrayOutputStream(in.available());
+//            for (int n = in.read(); n >= 0; n = in.read()) {
+//                out.write(n);
+//            }
+//            out.flush();
+//            byte[] data = out.toByteArray();
+//            parcel.unmarshall(data, 0, data.length);
+//            parcel.setDataPosition(0);
+//            cd = ClipData.CREATOR.createFromParcel(parcel);
+//            parcel.recycle();
+//        } catch (FileNotFoundException e) {
+//            Log.w(this.getClass().getName(), "Clip data storing file does not exist.");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (out != null) {
+//                try {
+//                    out.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            if (in != null) {
+//                try {
+//                    in.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        
+//        Log.d(this.getClass().getName(), "loaded clip data: " + cd);
+//        
+//        return cd == null ? ClipData.newPlainText("", "") : cd;
+//    }
 
     @Override
     public void onCreate() {
@@ -210,6 +284,7 @@ public class ClipMonitorService extends Service {
                 this.stopSelf();
             } else {
                 this.startMonitorClipboard();
+                this.saveCurrent();
             }
             break;
         }

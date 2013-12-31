@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 /**
  * The adapter for black list which manage a {@link BlacklistItem} list.
@@ -22,6 +23,7 @@ public class BlacklistAdapter extends ArrayAdapter<BlacklistItem> {
     private static class ViewHolder {
         public CheckedTextView mmText;
         public Switch mmSwitch;
+        public TextView mmType;
     }
     private final static int LAYOUT_RESOURCE = R.layout.list_row;
     
@@ -65,14 +67,16 @@ public class BlacklistAdapter extends ArrayAdapter<BlacklistItem> {
             viewHolder.mmText = (CheckedTextView) rowView.findViewById(R.id.rowContent);
             viewHolder.mmSwitch = (Switch) rowView.findViewById(R.id.rowEnabled);
             viewHolder.mmSwitch.setOnCheckedChangeListener(mSwitchListener);
+            viewHolder.mmType = (TextView) rowView.findViewById(R.id.rowType);
             rowView.setTag(viewHolder);
         }
         
         ViewHolder holder = (ViewHolder) rowView.getTag();
         BlacklistItem item = this.getItem(position);
-        holder.mmText.setText(item.getRawContentAsString());
+        holder.mmText.setText(item.getDiaplayText());
         holder.mmSwitch.setTag(item);
         holder.mmSwitch.setChecked(item.isEnabled());
+        holder.mmType.setText(item.getTypes());
         
         return rowView;
     }
