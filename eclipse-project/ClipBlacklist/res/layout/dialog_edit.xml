@@ -1,25 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <EditText
-        android:id="@+id/dialog_content"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:gravity="bottom"
-        android:inputType="textMultiLine"
-        android:minLines="@integer/dialog_content_def_line" >
+        android:orientation="vertical" >
 
-        <requestFocus />
-    </EditText>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_type_select_background_color" >
 
-    <CheckBox
-        android:id="@+id/dialog_item_enabled"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dialog_content"
-        android:text="@string/dialog_item_enabled_prompt" />
+            <CheckBox
+                android:id="@+id/dialog_item_enabled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/dialog_item_enabled_prompt" />
+        </LinearLayout>
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_type_select_background_color" >
+
+            <RadioButton
+                android:id="@+id/coerce_to_text_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:gravity="center_vertical"
+                android:text="@string/coerce_to_text_type" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/clip_coerce_to_text_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_input_area_background_color" >
+
+            <EditText
+                android:id="@+id/dialog_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="bottom"
+                android:inputType="textMultiLine"
+                android:minLines="@integer/dialog_content_def_line" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_type_select_background_color" >
+
+            <RadioButton
+                android:id="@+id/detail_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_type" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/clip_detail_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_input_area_background_color"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <CheckBox
+                    android:id="@+id/clip_text_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clip_text" />
+
+                <TextView
+                    android:id="@+id/clip_text_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="@dimen/message_margin_right"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:textColor="@color/error_color" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/clip_text_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/clip_detail_input_area_background_color" >
+
+                <EditText
+                    android:id="@+id/clip_text"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/clip_text_hint"
+                    android:inputType="textMultiLine" >
+
+                    <requestFocus />
+                </EditText>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <CheckBox
+                    android:id="@+id/clip_html_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clip_html" />
+
+                <TextView
+                    android:id="@+id/clip_html_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="@dimen/message_margin_right"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:textColor="@color/error_color" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/clip_html_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/clip_detail_input_area_background_color" >
+
+                <EditText
+                    android:id="@+id/clip_html"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/clip_html_hint"
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <CheckBox
+                    android:id="@+id/clip_uri_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clip_uri" />
+
+                <TextView
+                    android:id="@+id/clip_uri_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="@dimen/message_margin_right"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:textColor="@color/error_color" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/clip_uri_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/clip_detail_input_area_background_color" >
+
+                <EditText
+                    android:id="@+id/clip_uri"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/clip_uri_hint"
+                    android:inputType="textUri|textMultiLine" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <CheckBox
+                    android:id="@+id/clip_intent_check"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clip_intent" />
+
+                <TextView
+                    android:id="@+id/clip_intent_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="@dimen/message_margin_right"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:textColor="@color/error_color" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/clip_intent_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/clip_detail_input_area_background_color" >
+
+                <EditText
+                    android:id="@+id/clip_intent"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/clip_intent_hint"
+                    android:inputType="textMultiLine" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

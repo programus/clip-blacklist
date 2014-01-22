@@ -28,7 +28,8 @@
             android:id="@+id/rowType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/list_row_type_color" />
 
         <CheckedTextView
             android:id="@id/rowContent"

@@ -232,6 +232,7 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
     	if (this.hasClip()) {
     		this.addClipDataIntoList(cd);
     		this.mAdapter.notifyDataSetChanged();
+    		this.saveContents();
     		if (clear) {
 	    		this.clearClipboard();
     		}

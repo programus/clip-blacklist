@@ -17,6 +17,20 @@
     <string name="new_item_from_clipboard_remain" >using the current clipboard content but remain it</string><string name="new_item_input">inputing content manually</string>
     <string name="new_item_prompt">Add a new item into blacklist by</string>
     <string name="no_clip">Clipboard is empty.</string>
+    <string name="coerce_to_text_type">Input CoerceToText content</string>
+    <string name="detail_type">Input ClipData content by detail</string>
+    <string name="clip_text">Text</string>
+    <string name="clip_text_hint">Plain Text Clipboard Content</string>
+    <string name="clip_html">HTML</string>
+    <string name="clip_html_hint">HTML Clipboard Content</string>
+    <string name="clip_uri">URI</string>
+    <string name="clip_uri_hint">URI Clipboard Content</string>
+    <string name="clip_intent">Intent</string>
+    <string name="clip_intent_hint">Text form of intent clipboard content</string>
+    <string name="err_empty">The content is empty.</string>
+    <string name="err_invalid_uri">Invalid Uri text form.</string>
+    <string name="err_invalid_intent">Invalid Intent text form.</string>
+    <string name="err_no_detail_content">Please check at least one.</string>
     
 
 </resources>

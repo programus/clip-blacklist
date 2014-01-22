@@ -8,6 +8,11 @@ import android.content.Intent;
 import android.net.Uri;
 
 
+/**
+ * A helper class to process {@link ClipData} related function.
+ * @author programus
+ *
+ */
 public class ClipDataHelper {
 	private final static char[] DIGITS = { '0', '1', '2', '3', '4', '5', '6',
 			'7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', };
@@ -18,20 +23,38 @@ public class ClipDataHelper {
 	
 	private final static int FLAG_INT = -2;
 	
-    private final static String[] EMPTY_STR_ARRAY = new String[0];
+	/** Empty String array */
+    public final static String[] EMPTY_STR_ARRAY = new String[0];
 
 	private static ClipData emptyClip;
 	
+	/** Flag for ClipData Item Type: Text */
 	public final static int ITEM_TYPE_TEXT = 1;
+	/** Flag for ClipData Item Type: HTML */
 	public final static int ITEM_TYPE_HTML = 1 << 1;
+	/** Flag for ClipData Item Type: URI */
 	public final static int ITEM_TYPE_URI = 1 << 2;
+	/** Flag for ClipData Item Type: Intent */
 	public final static int ITEM_TYPE_INTENT = 1 << 3;
 	
+	/** Readable String for ClipData Item Type: Text */
 	public final static String TYPE_TEXT = "TXT";
+	/** Readable String for ClipData Item Type: HTML */
 	public final static String TYPE_HTML = "HTML";
+	/** Readable String for ClipData Item Type: URI */
 	public final static String TYPE_URI = "URI";
+	/** Readable String for ClipData Item Type: Intent */
 	public final static String TYPE_INTENT = "INTENT";
 	
+	/**
+	 * Return the item types flag of the specified item. 
+	 * @param item
+	 * @return the item types flag
+	 * @see #ITEM_TYPE_TEXT
+	 * @see #ITEM_TYPE_HTML
+	 * @see #ITEM_TYPE_URI
+	 * @see #ITEM_TYPE_INTENT
+	 */
 	public static int getItemTypes(ClipData.Item item) {
 		int types = 0;
 		if (item.getText() != null) {
@@ -50,6 +73,11 @@ public class ClipDataHelper {
 		return types;
 	}
 	
+	/**
+	 * Return the readable string for specified item types flag.
+	 * @param types
+	 * @return the readable string
+	 */
 	public static String getTypeString(int types) {
 		String[] typeStrings = {TYPE_TEXT, TYPE_HTML, TYPE_URI, TYPE_INTENT};
 		StringBuilder sb = new StringBuilder();
@@ -61,6 +89,12 @@ public class ClipDataHelper {
 		return sb.toString();
 	}
 	
+	/**
+	 * Return the hex string for specified integer. 
+	 * @param i
+	 * @param minWidth
+	 * @return the hex string like 0f3e
+	 */
 	public static String hexStringFromInt(int i, int minWidth) {
 		final int len = 8;
 		char[] buf = new char[len];
@@ -73,6 +107,11 @@ public class ClipDataHelper {
 		return new String(buf, cursor, len - cursor);
 	}
 	
+	/**
+	 * Convert the hex string to the integer value.
+	 * @param str
+	 * @return the integer value for the specified hex string
+	 */
 	public static int intFromHexString(CharSequence str) {
 		int n = 0;
 		for (int i = 0; i < str.length(); i++) {
@@ -84,6 +123,11 @@ public class ClipDataHelper {
 		return n;
 	}
 	
+	/**
+	 * toString method for values include null
+	 * @param cs
+	 * @return the string
+	 */
 	public static String toString(CharSequence cs) {
 		return cs == null ? null : cs.toString();
 	}
@@ -134,6 +178,10 @@ public class ClipDataHelper {
 		return ret;
 	}
 	
+	/**
+	 * Return an instance of {@link ClipData} with empty data.
+	 * @return empty ClipData instance
+	 */
 	public static ClipData getEmptyClipData() {
 		if (emptyClip == null) {
 	    	ClipData.Item item = new ClipData.Item((String)null);
@@ -142,6 +190,11 @@ public class ClipDataHelper {
 		return emptyClip;
 	}
 	
+	/**
+	 * Convert {@link ClipData} to String for storing.
+	 * @param clip
+	 * @return String for specifed clipdata
+	 */
 	public static CharSequence stringFromClipData(ClipData clip) {
 		StringBuilder sb = new StringBuilder();
 		if (clip != null) {
@@ -158,23 +211,30 @@ public class ClipDataHelper {
 		return sb;
 	}
 	
+	/**
+	 * Restore {@link ClipData} from String
+	 * @param s
+	 * @return ClipData instance
+	 */
 	public static ClipData clipDataFromString(CharSequence s) {
-		StringBuilder sb = new StringBuilder(s);
-		CharSequence prefix = extract(sb);
 		ClipData cd = null;
-		if (prefix != null) {
-			ClipDescription desc = clipDescriptionFromString(sb);
-			int n = extractInt(sb);
-			ClipData.Item[] items = new ClipData.Item[n];
-			for (int i = 0; i < n; i++) {
-				items[i] = itemFromString(sb);
-			}
-			if (n > 0) {
-				cd = new ClipData(desc, items[0]);
-			}
-			for (int i = 1; i < n; i++) {
-				cd.addItem(items[i]);
-			}
+		if (s != null) {
+            StringBuilder sb = new StringBuilder(s);
+            CharSequence prefix = extract(sb);
+            if (prefix != null) {
+                ClipDescription desc = clipDescriptionFromString(sb);
+                int n = extractInt(sb);
+                ClipData.Item[] items = new ClipData.Item[n];
+                for (int i = 0; i < n; i++) {
+                    items[i] = itemFromString(sb);
+                }
+                if (n > 0) {
+                    cd = new ClipData(desc, items[0]);
+                }
+                for (int i = 1; i < n; i++) {
+                    cd.addItem(items[i]);
+                }
+            }
 		}
 		return cd;
 	}

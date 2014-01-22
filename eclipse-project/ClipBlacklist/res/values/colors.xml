@@ -6,4 +6,9 @@
     <color name="list_pressed_background_color">#59c1e8</color>
     <color name="list_normal_background_color">#ddd</color>
     <color name="cab_background_color">#d73</color>
+    <color name="list_row_type_color">#09c</color>
+    <color name="clip_type_select_background_color">#e8c159</color>
+    <color name="clip_input_area_background_color">#eee0b8</color>
+    <color name="clip_detail_input_area_background_color">#f4f0e0</color>
+    <color name="error_color">#c00</color>
 </resources>

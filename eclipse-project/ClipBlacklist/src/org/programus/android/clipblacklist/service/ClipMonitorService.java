@@ -23,9 +23,17 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+/**
+ * The service to monitor the clipboard change.
+ * @author programus
+ *
+ */
 public class ClipMonitorService extends Service {
+    /** Key for flag that pass to the service by {@link #startService(Intent)}. */
     public final static String KEY_FLAG = "ClipboardBlacklist.Service.Flag";
+    /** Value of {@link #startService(Intent)} flag: start when boot the device. */
     public final static int FLAG_BOOT = 0;
+    /** Value of {@link #startService(Intent)} flag: blacklist was refreshed. */
     public final static int FLAG_REFRESH_BLACKLIST = 1;
 
     private final static String FILE_NAME = "ClipboardBlacklist.Clip";
@@ -106,7 +114,7 @@ public class ClipMonitorService extends Service {
     private void saveCurrent() {
     	ClipboardManager cm = this.getClipboardManager();
     	ClipData cd = cm.getPrimaryClip();
-    	if (this.isBlackClip(cd, blacklist)) {
+    	if (cd == null || this.isBlackClip(cd, blacklist)) {
     		cd = ClipDataHelper.getEmptyClipData();
     	}
 		this.saveClipData(cd);

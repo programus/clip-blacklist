@@ -5,9 +5,11 @@ import java.io.Serializable;
 import org.programus.android.clipblacklist.util.ClipDataHelper;
 
 import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 
 /**
  * A class to store the data in the blacklist.
@@ -21,8 +23,11 @@ public class BlacklistItem implements Serializable {
     private final static String SAVE_KEY_CONTENT = "%s.BlacklistItem.content";
     private final static String SAVE_KEY_ENABLED = "%s.BlacklistItem.enabled";
     
+    /** Readable string for coerce text clip data */
     public final static String TYPE_COERCE_TEXT = "CoerceText";
-
+    
+    private static final String CD_LABEL = "Blacklist Clip";
+    
     private ClipData rawContent;
     private String content;
     private boolean enabled;
@@ -70,19 +75,36 @@ public class BlacklistItem implements Serializable {
 		return rawContent;
 	}
     
+    /**
+     * Return the converted string of the stored clip data.
+     * @return the converted string
+     */
     public String getRawContentAsString() {
     	return rawCache;
     }
 
     /**
-     * Set the raw {#link ClipData} instance
-     * @param rawContent the raw {#link ClipData} instance
+     * Set the raw {@link ClipData} instance
+     * @param rawContent the raw {@link ClipData} instance
      */
 	public void setRawContent(ClipData rawContent) {
 		this.rawContent = rawContent;
 		this.rawCache = ClipDataHelper.stringFromClipData(rawContent).toString();
 	}
+	
+	/**
+	 * Set the raw {@link ClipData} instance by specifying only item.
+	 * @param item
+	 */
+	public void setRawContent(ClipData.Item item) {
+	    ClipDescription cd = new ClipDescription(CD_LABEL, ClipDataHelper.EMPTY_STR_ARRAY);
+	    this.setRawContent(new ClipData(cd, item));
+	}
 
+	/**
+	 * Indicate whether this blacklist item is judged by coerce text instead of accurate clip data.
+	 * @return true if judge by coerce text
+	 */
 	public boolean isCoerceText() {
 		return this.rawContent == null || this.content != null;
 	}
@@ -115,10 +137,27 @@ public class BlacklistItem implements Serializable {
         this.enabled = enabled;
     }
     
+    /**
+     * Return the types in string.
+     * @return the types
+     */
     public String getTypes() {
     	return this.isCoerceText() ? TYPE_COERCE_TEXT : ClipDataHelper.getTypeString(ClipDataHelper.getItemTypes(this.getRawContent().getItemAt(0)));
     }
     
+    /**
+     * Return the types in integer flag.
+     * If coerce to text, -1 will be returned.
+     * @return the types in integer
+     */
+    public int getTypesFlag() {
+        return this.isCoerceText() ? -1 : ClipDataHelper.getItemTypes(this.getRawContent().getItemAt(0));
+    }
+    
+    /**
+     * Return the content text. If there is intent in clip data, display intent, or display uri if uri included, or html and text at last.
+     * @return the content in string.
+     */
     public String getDiaplayText() {
     	String ret = null;
     	if (this.isCoerceText()) {
@@ -149,9 +188,22 @@ public class BlacklistItem implements Serializable {
      * @param key the key to store this item
      */
     public void save(final SharedPreferences.Editor editor, final String key) {
+        editor.putBoolean(key, true);
         editor.putBoolean(String.format(SAVE_KEY_ENABLED, key), this.enabled);
         editor.putString(String.format(SAVE_KEY_CONTENT, key), content);
         editor.putString(String.format(SAVE_KEY_RAW, key), this.rawCache);
+    }
+    
+    /**
+     * Save the item into {@link Bundle}. 
+     * @param bundle
+     * @param key
+     */
+    public void save(final Bundle bundle, final String key) {
+        bundle.putBoolean(key, true);
+        bundle.putBoolean(String.format(SAVE_KEY_ENABLED, key), this.enabled);
+        bundle.putString(String.format(SAVE_KEY_CONTENT, key), this.content);
+        bundle.putString(String.format(SAVE_KEY_RAW, key), this.rawCache);
     }
     
     /**
@@ -164,6 +216,18 @@ public class BlacklistItem implements Serializable {
         this.content = pref.getString(String.format(SAVE_KEY_CONTENT, key), null);
         this.rawCache = pref.getString(String.format(SAVE_KEY_RAW, key), null);
         this.rawContent = ClipDataHelper.clipDataFromString(rawCache);
+    }
+    
+    /**
+     * Load the item from {@link Bundle}.
+     * @param bundle
+     * @param key
+     */
+    public void load(final Bundle bundle, final String key) {
+        this.enabled = bundle.getBoolean(String.format(SAVE_KEY_ENABLED, key), false);
+        this.content = bundle.getString(String.format(SAVE_KEY_CONTENT, key), null);
+        this.rawCache = bundle.getString(String.format(SAVE_KEY_RAW, key), null);
+        this.rawContent = ClipDataHelper.clipDataFromString(this.rawCache);
     }
     
     /**
