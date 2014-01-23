@@ -46,6 +46,7 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
     private final static String KEY_LIST_FORMAT = "blacklist.item(%d)";
     
     private List<BlacklistItem> mContents = new ArrayList<BlacklistItem>();
+    private int mEditingIndex = -1;
     private BlacklistAdapter mAdapter;
     private ClipboardManager mClipboardManager;
 
@@ -256,6 +257,7 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
     
     private void promptEditItem(final int position) {
         BlacklistItem item = position >= 0 ? this.mContents.get(position) : null;
+        this.mEditingIndex = position;
         ItemEditDialog dialog = ItemEditDialog.newInstance(item);
         dialog.show(getFragmentManager(), "edit_item");
     }
@@ -275,6 +277,8 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
     public void onFinishedEdit(DialogFragment dialog, BlacklistItem item, boolean appendNew) {
         if (appendNew) {
             this.mContents.add(item);
+        } else {
+            this.mContents.set(mEditingIndex, item);
         }
         this.saveContents();
         this.mAdapter.notifyDataSetChanged();

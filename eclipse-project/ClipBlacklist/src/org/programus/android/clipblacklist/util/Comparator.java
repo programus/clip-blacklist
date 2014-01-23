@@ -9,9 +9,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
+/**
+ * Comparator for some classes.
+ * @author programus
+ *
+ */
 public class Comparator {
+    /**
+     * Compare intents
+     * @param a
+     * @param b
+     * @return true if equals
+     */
     public static boolean equals(Intent a, Intent b) {
         boolean ret = a == b;
         if (!ret && a != null && b != null && a.filterEquals(b)) {
@@ -23,6 +33,12 @@ public class Comparator {
         return ret;
     }
     
+    /**
+     * Compare Parcelables
+     * @param a
+     * @param b
+     * @return true if equals
+     */
     public static boolean equals(Parcelable a, Parcelable b) {
         boolean ret = a == b;
         if (!ret && a != null && b != null) {
@@ -39,19 +55,31 @@ public class Comparator {
         return ret;
     }
     
+    /**
+     * Compare ClipData approximately. Only compare the first item.
+     * @param a
+     * @param b
+     * @return true if the first item equals
+     */
     public static boolean approxEquals(ClipData a, ClipData b) {
-    	Log.d(Comparator.class.getSimpleName(), "approx eq: " + a + " vs " + b);
+//    	Log.d(Comparator.class.getSimpleName(), "approx eq: " + a + " vs " + b);
     	boolean ret = a == b;
     	if (!ret && a != null && b != null && a.getItemCount() > 0 && b.getItemCount() > 0) {
     		ClipData.Item ia = a.getItemAt(0);
     		ClipData.Item ib = b.getItemAt(0);
     		ret = equals(ia, ib);
     	}
-    	Log.d(Comparator.class.getSimpleName(), "result: " + ret);
+//    	Log.d(Comparator.class.getSimpleName(), "result: " + ret);
     	
     	return ret;
     }
     
+    /**
+     * Compare ClipData
+     * @param a
+     * @param b
+     * @return true if equals
+     */
     public static boolean equals(ClipData a, ClipData b) {
     	boolean ret = a == b;
     	if (!ret && a != null && b != null && a.getItemCount() == b.getItemCount()) {
@@ -68,6 +96,12 @@ public class Comparator {
     	return ret;
     }
     
+    /**
+     * Compare ClipDescription
+     * @param a
+     * @param b
+     * @return true if equals
+     */
     public static boolean equals(ClipDescription a, ClipDescription b) {
     	boolean ret = a == b;
     	if (!ret && a != null && b != null && a.getMimeTypeCount() == b.getMimeTypeCount()) {
@@ -85,6 +119,12 @@ public class Comparator {
     	return ret;
     }
     
+    /**
+     * Compare ClipData.Item
+     * @param a
+     * @param b
+     * @return true if equals
+     */
     public static boolean equals(ClipData.Item a, ClipData.Item b) {
     	boolean ret = a == b;
     	if (a != null && b != null) {
@@ -97,6 +137,12 @@ public class Comparator {
     	return ret;
     }
     
+    /**
+     * Compare CharSequences
+     * @param a
+     * @param b
+     * @return true if contains the same contents
+     */
     public static boolean equals(CharSequence a, CharSequence b) {
     	boolean ret = a == b;
     	if (!ret && a != null && b != null) {
@@ -105,6 +151,12 @@ public class Comparator {
     	return ret;
     }
     
+    /**
+     * Compare Uri
+     * @param a
+     * @param b
+     * @return true if equals
+     */
     public static boolean equals(Uri a, Uri b) {
     	boolean ret = a == b;
     	if (!ret && a != null && b != null) {

@@ -241,4 +241,9 @@ public class BlacklistItem implements Serializable {
         item.load(pref, key);
         return item;
     }
+    
+    @Override
+    public String toString() {
+        return this.isCoerceText() ? String.format("CoerceToText/Content: %s, enabled: %s", this.content, this.enabled) : String.format("Raw/ClipData: %s, enabled: %s", this.rawContent.toString(), this.enabled);
+    }
 }
