@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import org.programus.android.clipblacklist.R;
 import org.programus.android.clipblacklist.data.BlacklistItem;
 import org.programus.android.clipblacklist.util.ClipDataHelper;
+import org.programus.android.clipblacklist.util.Comparator;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -191,6 +192,17 @@ public class ItemEditDialog extends DialogFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mIsCoerceText = !isChecked;
+                if (isChecked) {
+                    if (mTypes == 0) {
+                        mTypes = ClipDataHelper.ITEM_TYPE_TEXT;
+                        mClipText.setText(mContentTextView.getText());
+                    } else {
+                        ClipData.Item item = getItemFromDetailPart(false);
+                        if (item != null && Comparator.equals(mContentTextView.getText(), item.coerceToText(getActivity()))) {
+                            mContentTextView.setText("");
+                        }
+                    }
+                }
                 updateCheckAndVisibility(mIsCoerceText, mTypes);
             }
         });
@@ -266,11 +278,13 @@ public class ItemEditDialog extends DialogFragment {
         boolean noError = true;
         mItem.setEnabled(this.mEnabledCheckBox.isChecked());
         if (this.mIsCoerceText) {
+            mItem.setRawContent((ClipData) null);
             mItem.setContent(this.mContentTextView.getText().toString());
         } else {
             ClipData.Item item = this.getItemFromDetailPart(true);
             noError = item != null;
             if (noError) {
+                this.mItem.setContent(null);
                 this.mItem.setRawContent(item);
             }
         }

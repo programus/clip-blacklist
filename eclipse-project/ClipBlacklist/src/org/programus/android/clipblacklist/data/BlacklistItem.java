@@ -89,7 +89,7 @@ public class BlacklistItem implements Serializable {
      */
 	public void setRawContent(ClipData rawContent) {
 		this.rawContent = rawContent;
-		this.rawCache = ClipDataHelper.stringFromClipData(rawContent).toString();
+		this.rawCache = rawContent == null ? null : ClipDataHelper.stringFromClipData(rawContent).toString();
 	}
 	
 	/**
@@ -97,8 +97,12 @@ public class BlacklistItem implements Serializable {
 	 * @param item
 	 */
 	public void setRawContent(ClipData.Item item) {
-	    ClipDescription cd = new ClipDescription(CD_LABEL, ClipDataHelper.EMPTY_STR_ARRAY);
-	    this.setRawContent(new ClipData(cd, item));
+	    if (item != null) {
+            ClipDescription cd = this.rawContent == null ? new ClipDescription(CD_LABEL, ClipDataHelper.EMPTY_STR_ARRAY) : this.rawContent.getDescription();
+            this.setRawContent(new ClipData(cd, item));
+	    } else {
+	        this.setRawContent((ClipData) null);
+	    }
 	}
 
 	/**
@@ -151,7 +155,7 @@ public class BlacklistItem implements Serializable {
      * @return the types in integer
      */
     public int getTypesFlag() {
-        return this.isCoerceText() ? -1 : ClipDataHelper.getItemTypes(this.getRawContent().getItemAt(0));
+        return this.isCoerceText() ? 0 : ClipDataHelper.getItemTypes(this.getRawContent().getItemAt(0));
     }
     
     /**
