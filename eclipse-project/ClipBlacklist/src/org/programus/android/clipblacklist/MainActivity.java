@@ -19,6 +19,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -162,6 +163,9 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
 
     private void loadContents() {
         loadBlacklist(this, this.mContents);
+        if (this.mAdapter != null) {
+            this.mAdapter.notifyDataSetChanged();
+        }
     }
     
     private void saveContents() {
@@ -275,11 +279,13 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
 
     @Override
     public void onFinishedEdit(DialogFragment dialog, BlacklistItem item, boolean appendNew) {
+        Log.d(this.getClass().getName(), "EditingIndex: " + mEditingIndex + "/AppendNew: " + appendNew);
         if (appendNew) {
             this.mContents.add(item);
         } else {
             this.mContents.set(mEditingIndex, item);
         }
+        Log.d(this.getClass().getName(), this.mContents.toString());
         this.saveContents();
         this.mAdapter.notifyDataSetChanged();
     }
@@ -320,6 +326,7 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
                 contents.get(position).setEnabled(enabled);
             }
         }, false);
+        this.saveContents();
     }
 
     @Override

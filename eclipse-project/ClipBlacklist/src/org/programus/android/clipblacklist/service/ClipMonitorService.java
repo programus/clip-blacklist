@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.programus.android.clipblacklist.MainActivity;
 import org.programus.android.clipblacklist.data.BlacklistItem;
+import org.programus.android.clipblacklist.util.ActivityLog;
 import org.programus.android.clipblacklist.util.ClipDataHelper;
 import org.programus.android.clipblacklist.util.Comparator;
 
@@ -46,6 +47,8 @@ public class ClipMonitorService extends Service {
     private boolean monitoring = false;
     
     private ClipData prevCd;
+    
+    private ActivityLog log;
 
     private ClipboardManager.OnPrimaryClipChangedListener clipChangedListener = new ClipboardManager.OnPrimaryClipChangedListener() {
         @Override
@@ -77,9 +80,11 @@ public class ClipMonitorService extends Service {
     }
     
     private List<BlacklistItem> getEnabledBlacklist(List<BlacklistItem> list) {
-        List<BlacklistItem> all = MainActivity.loadBlacklist(getApplicationContext(), null);
+        List<BlacklistItem> all = MainActivity.loadBlacklist(this, null);
         if (list == null) {
             list = new ArrayList<BlacklistItem>();
+        } else {
+            list.clear();
         }
         for (BlacklistItem item : all) {
             if (item.isEnabled()) {
@@ -96,14 +101,16 @@ public class ClipMonitorService extends Service {
         	for (BlacklistItem bi : list) {
         		if (bi.isEnabled()) {
         			if (bi.isCoerceText()) {
-        				CharSequence cs = item.coerceToText(getApplicationContext());
+        				CharSequence cs = item.coerceToText(this);
         				if (cs != null && cs.toString().equals(bi.getContent())) {
         					ret = true;
-        					break;
         				}
         			} else if (Comparator.approxEquals(bi.getRawContent(), cd)){
         				ret = true;
-        				break;
+        			}
+        			if (ret) {
+        			    this.log.block(cd, bi);
+        			    break;
         			}
         		}
         	}
@@ -251,6 +258,7 @@ public class ClipMonitorService extends Service {
 			NotificationCompat.Builder builder = new NotificationCompat.Builder(this.getApplicationContext());
 			notification = builder.build();
 		}
+		this.log = ActivityLog.getInstance(this);
     }
 
     private void startMonitorClipboard() {
@@ -287,6 +295,7 @@ public class ClipMonitorService extends Service {
         case FLAG_BOOT:
         case FLAG_REFRESH_BLACKLIST:
             this.blacklist = this.getEnabledBlacklist(this.blacklist);
+            Log.w(this.getClass().getName(), this.blacklist.toString());
             if (this.blacklist.isEmpty()) {
                 this.stopMonitorClipboard();
                 this.stopSelf();
