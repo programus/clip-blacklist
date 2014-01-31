@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        android:background="@color/clip_data_table_border_color" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <TableLayout
+            android:id="@+id/clip_preview_details_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:shrinkColumns="2"
+            android:stretchColumns="2" >
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_vertical" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/clip_data_table_border_color" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/clip_data_table_prompt_bg"
+                android:gravity="center_horizontal"
+                android:text="@string/clip_data_details_prompt"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/clip_data_table_border_color" />
+
+            <TableRow android:id="@+id/clip_text_row" >
+
+                <TextView
+                    android:id="@+id/clip_preview_text_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/clip_data_table_prompt_bg"
+                    android:gravity="center_horizontal"
+                    android:paddingLeft="@dimen/clip_table_margin_h"
+                    android:paddingRight="@dimen/clip_table_margin_h"
+                    android:text="@string/clip_data_text_prompt_short"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/clip_data_table_border_color" />
+
+                <TextView
+                    android:id="@+id/clip_preview_text"
+                    android:ellipsize="end"
+                    android:maxLines="@integer/clip_preview_max_line"
+                    android:paddingLeft="@dimen/clip_table_margin_h"
+                    android:paddingRight="@dimen/clip_table_margin_h"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/clip_data_table_border_color" />
+
+            <TableRow
+                android:id="@+id/clip_html_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/clip_preview_html_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/clip_data_table_prompt_bg"
+                    android:gravity="center_horizontal"
+                    android:text="@string/clip_data_html_prompt_short"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/clip_data_table_border_color" />
+
+                <TextView
+                    android:id="@+id/clip_preview_html"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="@integer/clip_preview_max_line"
+                    android:paddingLeft="@dimen/clip_table_margin_h"
+                    android:paddingRight="@dimen/clip_table_margin_h"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/clip_data_table_border_color" />
+
+            <TableRow
+                android:id="@+id/clip_uri_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/clip_preview_uri_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/clip_data_table_prompt_bg"
+                    android:gravity="center_horizontal"
+                    android:text="@string/clip_data_url_prompt_short"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/clip_data_table_border_color" />
+
+                <TextView
+                    android:id="@+id/clip_preview_uri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="@integer/clip_preview_max_line"
+                    android:paddingLeft="@dimen/clip_table_margin_h"
+                    android:paddingRight="@dimen/clip_table_margin_h"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/clip_data_table_border_color" />
+
+            <TableRow
+                android:id="@+id/clip_intent_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/clip_preview_intent_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/clip_data_table_prompt_bg"
+                    android:gravity="center_horizontal"
+                    android:text="@string/clip_data_intent_prompt_short"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/clip_data_table_border_color" />
+
+                <TextView
+                    android:id="@+id/clip_preview_intent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="@integer/clip_preview_max_line"
+                    android:paddingLeft="@dimen/clip_table_margin_h"
+                    android:paddingRight="@dimen/clip_table_margin_h"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+            </TableRow>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/clip_data_table_border_color" />
+
+        </TableLayout>
+
+        <LinearLayout
+            android:id="@+id/clip_preview_coerce_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/clip_data_table_border_color" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/clip_data_table_prompt_bg"
+                android:gravity="center_horizontal"
+                android:text="@string/clip_data_coerce_prompt"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/clip_data_table_border_color" />
+
+            <TextView
+                android:id="@+id/clip_preview_coerce"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="@integer/clip_preview_coerce_line"
+                android:maxLines="@integer/clip_preview_coerce_line"
+                android:minLines="@integer/clip_preview_coerce_line"
+                android:paddingBottom="1dp"
+                android:paddingLeft="@dimen/clip_table_margin_h"
+                android:paddingRight="@dimen/clip_table_margin_h"
+                android:paddingTop="2dp"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/clip_data_table_border_color" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        android:background="@color/clip_data_table_border_color" />
+
+</LinearLayout>

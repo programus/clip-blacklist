@@ -7,5 +7,6 @@
     <dimen name="list_content_textsize">20dp</dimen>
     <dimen name="list_text_padding">5dp</dimen>
     <dimen name="message_margin_right">10dip</dimen>
+    <dimen name="clip_table_margin_h">5dp</dimen>
 
 </resources>

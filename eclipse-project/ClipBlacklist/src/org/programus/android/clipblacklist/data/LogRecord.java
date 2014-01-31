@@ -22,21 +22,26 @@ public class LogRecord {
     private BlacklistItem blockedItem;
     
     /**
-     * Constructor. Will initialize the time as current time.
+     * Return an instance with the current time as log time.
+     * @return an instance
      */
-    public LogRecord() {
-        this.time = new Date();
+    public static LogRecord getNowLog() {
+        LogRecord record = new LogRecord();
+        record.setTime(new Date());
+        return record;
     }
     
     /**
-     * Constructor.
+     * Return an instance with the current time as log time.
      * @param clip
      * @param item
+     * @return an instance
      */
-    public LogRecord(ClipData clip, BlacklistItem item) {
-        this();
-        this.setBlockedClip(clip);
-        this.setBlockedItem(item);
+    public static LogRecord getNowLog(ClipData clip, BlacklistItem item) {
+        LogRecord record = getNowLog();
+        record.setBlockedClip(clip);
+        record.setBlockedItem(item);
+        return record;
     }
     
     /**

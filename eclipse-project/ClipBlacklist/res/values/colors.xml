@@ -11,4 +11,8 @@
     <color name="clip_input_area_background_color">#eee0b8</color>
     <color name="clip_detail_input_area_background_color">#f4f0e0</color>
     <color name="error_color">#c00</color>
+    <color name="clip_data_table_border_color">#88000000</color>
+    <color name="clip_data_table_prompt_bg">#e0e8c159</color>
+    <color name="clip_data_table_disabled_bg">#8888</color>
+    <color name="clip_data_table_prompt_disabled_bg">#666</color>
 </resources>

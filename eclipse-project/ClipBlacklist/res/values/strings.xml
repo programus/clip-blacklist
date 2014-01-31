@@ -31,6 +31,13 @@
     <string name="err_invalid_uri">Invalid Uri text form.</string>
     <string name="err_invalid_intent">Invalid Intent text form.</string>
     <string name="err_no_detail_content">Please check at least one.</string>
+    <string name="clip_data_text_prompt_short">T</string>
+    <string name="clip_data_html_prompt_short">H</string>
+    <string name="clip_data_url_prompt_short">U</string>
+    <string name="clip_data_intent_prompt_short">I</string>
+    <string name="clip_data_coerce_prompt">Coerce To Text</string>
+    <string name="clip_data_details_prompt">ClipData Details</string>
+    <string name="log_time_format">yyyy\nMMM\ndd\nHH:mm\nss.SSS</string>
     
 
 </resources>

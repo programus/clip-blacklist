@@ -6,6 +6,7 @@ import org.programus.android.clipblacklist.data.LogRecord;
 import android.content.ClipData;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -21,13 +22,20 @@ public class ActivityLog {
         private static final String DB_NAME          = "clipblacklistlog.db";
         private static final int    DB_VERSION       = 1;
 
-        private static final String TABLE_NAME       = "act_log";
-        private static final String COL_ID           = "_id";
-        private static final String COL_TYPE         = "act_type";
-        private static final String COL_TIME         = "act_time";
-        private static final String COL_CLIP         = "blocked_clip";
-        private static final String COL_ITEM_COERCE  = "blocked_item_coerce_text";
-        private static final String COL_ITEM_CONTENT = "blocked_item_content";
+        private static final String TABLE_NAME           = "act_log";
+        private static final String COL_ID               = "_id";
+        private static final String COL_TYPE             = "act_type";
+        private static final String COL_TIME             = "act_time";
+        private static final String COL_CLIP             = "blocked_clip";
+        private static final String COL_ITEM_COERCE      = "blocked_item_coerce_text";
+        private static final String COL_ITEM_CONTENT     = "blocked_item_content";
+        private static int          COL_ID_IDX           = -1;
+        private static int          COL_TYPE_IDX         = -1;
+        private static int          COL_TIME_IDX         = -1;
+        private static int          COL_CLIP_IDX         = -1;
+        private static int          COL_ITEM_COERCE_IDX  = -1;
+        private static int          COL_ITEM_CONTENT_IDX = -1;
+    
 
         public DbOpenHelper(Context context) {
             super(context, DB_NAME, null, DB_VERSION);
@@ -49,7 +57,7 @@ public class ActivityLog {
     }
     private Context mContext;
     private SQLiteOpenHelper mSqlite;
-
+    
     private static ActivityLog mInstance;
 
     private ActivityLog(Context context) {
@@ -76,9 +84,52 @@ public class ActivityLog {
      * @param item
      */
     public void block(ClipData clip, BlacklistItem item) {
-        LogRecord record = new LogRecord(clip, item);
+        LogRecord record = LogRecord.getNowLog(clip, item);
         record.setType(LogRecord.LOG_TYPE_BLOCK);
         this.insertLogRecord(record);
+    }
+    
+    /**
+     * Fetch an instance of {@link LogRecord} from a valid cursor.
+     * @param cursor
+     * @return the fetched LogRecord
+     */
+    public static LogRecord fetchLogRecord(Cursor cursor) {
+        if (DbOpenHelper.COL_ID_IDX < 0) {
+            DbOpenHelper.COL_ID_IDX = cursor.getColumnIndex(DbOpenHelper.COL_ID);
+        }
+        if (DbOpenHelper.COL_TIME_IDX < 0) {
+            DbOpenHelper.COL_TIME_IDX = cursor.getColumnIndex(DbOpenHelper.COL_ID);
+        }
+        if (DbOpenHelper.COL_TYPE_IDX < 0) {
+            DbOpenHelper.COL_TYPE_IDX = cursor.getColumnIndex(DbOpenHelper.COL_ID);
+        }
+        if (DbOpenHelper.COL_CLIP_IDX < 0) {
+            DbOpenHelper.COL_CLIP_IDX = cursor.getColumnIndex(DbOpenHelper.COL_ID);
+        }
+        if (DbOpenHelper.COL_ITEM_COERCE_IDX < 0) {
+            DbOpenHelper.COL_ITEM_COERCE_IDX = cursor.getColumnIndex(DbOpenHelper.COL_ID);
+        }
+        if (DbOpenHelper.COL_ITEM_CONTENT_IDX < 0) {
+            DbOpenHelper.COL_ITEM_CONTENT_IDX = cursor.getColumnIndex(DbOpenHelper.COL_ID);
+        }
+        LogRecord record = new LogRecord();
+        record.setId(cursor.getLong(DbOpenHelper.COL_ID_IDX));
+        record.setTime(cursor.getLong(DbOpenHelper.COL_TIME_IDX));
+        record.setType(cursor.getInt(DbOpenHelper.COL_TYPE_IDX));
+        String clipString = cursor.getString(DbOpenHelper.COL_CLIP_IDX);
+        record.setBlockedClip(ClipDataHelper.clipDataFromString(clipString));
+        boolean isCoerce = cursor.getInt(DbOpenHelper.COL_ITEM_COERCE_IDX) != 0;
+        String content = cursor.getString(DbOpenHelper.COL_ITEM_CONTENT_IDX);
+        BlacklistItem item = new BlacklistItem(true);
+        if (isCoerce) {
+            item.setContent(content);
+        } else {
+            item.setRawContent(content);
+        }
+        record.setBlockedItem(item);
+
+        return record;
     }
     
     private void insertLogRecord(LogRecord record) {

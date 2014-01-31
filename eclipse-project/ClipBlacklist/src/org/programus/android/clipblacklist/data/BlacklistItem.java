@@ -93,6 +93,15 @@ public class BlacklistItem implements Serializable {
 	}
 	
 	/**
+	 * Set the raw {@link ClipData} instance by its string form.
+	 * @param rawContentString
+	 */
+	public void setRawContent(String rawContentString) {
+	    this.rawCache = rawContentString;
+	    this.rawContent = rawCache == null ? null : ClipDataHelper.clipDataFromString(rawContentString);
+	}
+	
+	/**
 	 * Set the raw {@link ClipData} instance by specifying only item.
 	 * @param item
 	 */

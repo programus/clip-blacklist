@@ -10,10 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
-import android.widget.Switch;
-import android.widget.TextView;
 
 /**
  * The adapter for black list which manage a {@link BlacklistItem} list.
@@ -21,9 +18,8 @@ import android.widget.TextView;
  */
 public class BlacklistAdapter extends ArrayAdapter<BlacklistItem> {
     private static class ViewHolder {
-        public CheckedTextView mmText;
-        public Switch mmSwitch;
-        public TextView mmType;
+        public BlacklistItemPreviewer mmPreviwer;
+        public CompoundButton mmEnabled;
     }
     private final static int LAYOUT_RESOURCE = R.layout.list_row;
     
@@ -64,19 +60,17 @@ public class BlacklistAdapter extends ArrayAdapter<BlacklistItem> {
             LayoutInflater inflater = this.context.getLayoutInflater();
             rowView = inflater.inflate(R.layout.list_row, null);
             ViewHolder viewHolder = new ViewHolder();
-            viewHolder.mmText = (CheckedTextView) rowView.findViewById(R.id.rowContent);
-            viewHolder.mmSwitch = (Switch) rowView.findViewById(R.id.rowEnabled);
-            viewHolder.mmSwitch.setOnCheckedChangeListener(mSwitchListener);
-            viewHolder.mmType = (TextView) rowView.findViewById(R.id.rowType);
+            viewHolder.mmPreviwer = new BlacklistItemPreviewer(rowView);
+            viewHolder.mmEnabled = (CompoundButton) rowView.findViewById(R.id.rowEnabled);
+            viewHolder.mmEnabled.setOnCheckedChangeListener(mSwitchListener);
             rowView.setTag(viewHolder);
         }
         
         ViewHolder holder = (ViewHolder) rowView.getTag();
         BlacklistItem item = this.getItem(position);
-        holder.mmText.setText(item.getDiaplayText());
-        holder.mmSwitch.setTag(item);
-        holder.mmSwitch.setChecked(item.isEnabled());
-        holder.mmType.setText(item.getTypes());
+        holder.mmPreviwer.setItem(item);
+        holder.mmEnabled.setTag(item);
+        holder.mmEnabled.setChecked(item.isEnabled());
         
         return rowView;
     }

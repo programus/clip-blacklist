@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/org.programus.android.clipblacklist"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/checked_list_selector"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal"
+    app:checkable_id="@+id/rowContent" >
+
+    <TextView
+        android:id="@+id/log_time"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:text="@string/log_time_format"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        layout="@layout/blacklist_item_preview" />
+
+</LinearLayout>
