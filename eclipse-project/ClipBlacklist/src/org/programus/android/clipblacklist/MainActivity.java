@@ -328,6 +328,11 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
         }, false);
         this.saveContents();
     }
+    
+    private void showLog() {
+        Intent intent = new Intent(this, LogRecordListActivity.class);
+        this.startActivity(intent);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -343,6 +348,9 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
         switch (id) {
         case R.id.action_add:
         	this.addBlacklistItem();
+            break;
+        case R.id.action_view_log:
+            this.showLog();
             break;
         default:
             processed = false;

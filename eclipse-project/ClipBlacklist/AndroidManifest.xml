@@ -22,12 +22,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".service.ClipMonitorService"></service>
-        <receiver android:name=".receiver.BootReceiver">
+
+        <service android:name="org.programus.android.clipblacklist.service.ClipMonitorService" >
+        </service>
+
+        <receiver android:name="org.programus.android.clipblacklist.receiver.BootReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name="org.programus.android.clipblacklist.LogRecordListActivity"
+            android:label="@string/title_logrecord_list"
+            android:parentActivityName="org.programus.android.clipblacklist.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.programus.android.clipblacklist.MainActivity" />
+        </activity>
+        <activity
+            android:name="org.programus.android.clipblacklist.LogRecordDetailActivity"
+            android:label="@string/title_logrecord_detail"
+            android:parentActivityName=".LogRecordListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LogRecordListActivity" />
+        </activity>
+        <provider android:multiprocess="true" android:authorities="org.programus.android.clipblacklist.util.ActivityLog.ClipBlacklistLogProvider" android:name=".util.ActivityLog$ClipBlacklistLogProvider"></provider>
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import java.util.Date;
 import org.programus.android.clipblacklist.util.ClipDataHelper;
 
 import android.content.ClipData;
+import android.os.Bundle;
 
 /**
  * A log record
@@ -15,11 +16,48 @@ public class LogRecord {
     /** Block blacklist type */
     public final static int LOG_TYPE_BLOCK = 1;
     private final static String[] LOG_TYPE_STR = {null, "block"};
+    
+    private final static String SAVE_KEY_ID = "%s.LogRecord.id";
+    private final static String SAVE_KEY_TIME = "%s.LogRecord.time";
+    private final static String SAVE_KEY_TYPE = "%s.LogRecord.type";
+    private final static String SAVE_KEY_CLIP = "%s.LogRecord.blockedClip";
+    private final static String SAVE_KEY_ITEM = "%s.LogRecord.blockedItem";
+
     private long id;
     private Date time;
     private int type;
     private ClipData blockedClip;
     private BlacklistItem blockedItem;
+    
+    /**
+     * Save this instance into bundle.
+     * @param bundle
+     * @param key
+     */
+    public void save(Bundle bundle, String key) {
+        bundle.putBoolean(key, true);
+        bundle.putLong(String.format(SAVE_KEY_ID, key), this.getId());
+        bundle.putLong(String.format(SAVE_KEY_TIME, key), this.getTimeAsLong());
+        bundle.putInt(String.format(SAVE_KEY_TYPE, key), this.getType());
+        bundle.putString(String.format(SAVE_KEY_CLIP, key), this.getBlockedClipAsString());
+        this.getBlockedItem().save(bundle, String.format(SAVE_KEY_ITEM, key));
+    }
+    
+    /**
+     * load the LogRecord from bundle
+     * @param bundle
+     * @param key
+     */
+    public void load(Bundle bundle, String key) {
+        if (bundle.containsKey(key)) {
+            this.setId(bundle.getLong(String.format(SAVE_KEY_ID, key)));
+            this.setTime(bundle.getLong(String.format(SAVE_KEY_TIME, key)));
+            this.setType(bundle.getInt(String.format(SAVE_KEY_TYPE, key)));
+            this.setBlockedClip(bundle.getString(String.format(SAVE_KEY_CLIP, key)));
+            this.blockedItem = new BlacklistItem();
+            this.blockedItem.load(bundle, String.format(SAVE_KEY_ITEM, key));
+        }
+    }
     
     /**
      * Return an instance with the current time as log time.

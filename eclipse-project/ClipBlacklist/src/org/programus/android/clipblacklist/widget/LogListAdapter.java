@@ -44,7 +44,7 @@ public class LogListAdapter extends CursorAdapter {
         if (this.mInflater == null) {
             this.mInflater = LayoutInflater.from(context);
         }
-        View row = this.mInflater.inflate(R.layout.blacklist_item_preview, parent);
+        View row = this.mInflater.inflate(R.layout.log_row, null);
         ViewHolder holder = new ViewHolder();
         holder.mmTime = (TextView) row.findViewById(R.id.log_time);
         holder.mmPreviewer = new BlacklistItemPreviewer(row);

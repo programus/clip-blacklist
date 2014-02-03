@@ -1,0 +1,59 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".LogRecordDetailFragment" >
+
+    <TextView
+        android:id="@+id/log_detail_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/clip_detail_input_area_background_color"
+        android:text="@string/log_detail_time_format"
+        android:textStyle="italic" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_type_select_background_color"
+            android:gravity="center_horizontal"
+            android:text="@string/log_detail_item_prompt"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
+
+        <include
+            android:id="@+id/log_detail_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/blacklist_item_detail" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_type_select_background_color"
+            android:gravity="center_horizontal"
+            android:text="@string/log_detail_clip_prompt"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
+
+        <include
+            android:id="@+id/log_detail_clip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/blacklist_item_detail" />
+    </LinearLayout>
+
+</LinearLayout>

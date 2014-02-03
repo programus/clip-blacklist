@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/clip_detail_coerce_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_input_area_background_color"
+            android:text="@string/clip_data_coerce_prompt"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/clip_detail_coerce"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_detail_input_area_background_color"
+            android:paddingLeft="@dimen/clip_table_margin_h"
+            android:paddingRight="@dimen/clip_table_margin_h"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/clip_detail_text_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_input_area_background_color"
+            android:text="@string/clip_data_text_prompt"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/clip_detail_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_detail_input_area_background_color"
+            android:paddingLeft="@dimen/clip_table_margin_h"
+            android:paddingRight="@dimen/clip_table_margin_h"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/clip_detail_html_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_input_area_background_color"
+            android:text="@string/clip_data_html_prompt"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/clip_detail_html"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_detail_input_area_background_color"
+            android:paddingLeft="@dimen/clip_table_margin_h"
+            android:paddingRight="@dimen/clip_table_margin_h"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/clip_detail_uri_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_input_area_background_color"
+            android:text="@string/clip_data_uri_prompt"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/clip_detail_uri"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_detail_input_area_background_color"
+            android:paddingLeft="@dimen/clip_table_margin_h"
+            android:paddingRight="@dimen/clip_table_margin_h"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/clip_detail_intent_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_input_area_background_color"
+            android:text="@string/clip_data_intent_prompt"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/clip_detail_intent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_detail_input_area_background_color"
+            android:paddingLeft="@dimen/clip_table_margin_h"
+            android:paddingRight="@dimen/clip_table_margin_h"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+</LinearLayout>
