@@ -229,7 +229,7 @@ public class ActivityLog {
      * @return all log record.
      */
     public Cursor queryAllLog() {
-        return this.mContext.getContentResolver().query(ClipBlacklistLogProvider.CONTENT_URI, ClipBlacklistLogProvider.ALL_COLS, null, null, null);
+        return this.mContext.getContentResolver().query(ClipBlacklistLogProvider.CONTENT_URI, ClipBlacklistLogProvider.ALL_COLS, null, null, String.format("%s %s", ClipBlacklistLogProvider.TIME, "DESC"));
     }
     
     /**
@@ -237,7 +237,7 @@ public class ActivityLog {
      * @return CursorLoader
      */
     public CursorLoader newCursorLoaderForAllLog() {
-        return new CursorLoader(this.mContext, ClipBlacklistLogProvider.CONTENT_URI, ClipBlacklistLogProvider.ALL_COLS, null, null, null);
+        return new CursorLoader(this.mContext, ClipBlacklistLogProvider.CONTENT_URI, ClipBlacklistLogProvider.ALL_COLS, null, null, String.format("%s %s", ClipBlacklistLogProvider.TIME, "DESC"));
     }
     
     /**
