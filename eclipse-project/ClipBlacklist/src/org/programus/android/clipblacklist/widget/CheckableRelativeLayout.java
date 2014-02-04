@@ -20,6 +20,7 @@ public class CheckableRelativeLayout extends RelativeLayout implements Checkable
     private int mSpecifiedId = -1;
     private Checkable mCheckableCtrl;
     private boolean mChecked;
+    private boolean mAutoSearch;
 
     /**
      * Constructor.
@@ -57,6 +58,7 @@ public class CheckableRelativeLayout extends RelativeLayout implements Checkable
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CheckableRelativeLayout);
         this.mSpecifiedId = a.getResourceId(R.styleable.CheckableRelativeLayout_checkable_id, -1);
         this.mChecked = a.getBoolean(R.styleable.CheckableRelativeLayout_checked, false);
+        this.mAutoSearch = a.getBoolean(R.styleable.CheckableRelativeLayout_auto_search_checkable, false);
         a.recycle();
     }
 
@@ -98,7 +100,7 @@ public class CheckableRelativeLayout extends RelativeLayout implements Checkable
     protected void onFinishInflate() {
         super.onFinishInflate();
         this.mCheckableCtrl = this.getCheckableById(this.mSpecifiedId);
-        if (this.mCheckableCtrl == null) {
+        if (this.mCheckableCtrl == null && this.mAutoSearch) {
             this.mCheckableCtrl = this.findCheckableChild(this);
         }
     }
