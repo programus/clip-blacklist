@@ -41,7 +41,9 @@ public class ActivityLog {
         public final static int LOG_DB_ID = 200;
         /** Content URI */
         public final static Uri CONTENT_URI = Uri.parse(String.format("content://%s/%s", AUTHORITY, BASE_PATH));
+        /** Not sure what this is */
         public final static String CONTENT_TYPE = String.format("%s/%s", ContentResolver.CURSOR_DIR_BASE_TYPE, "logs");
+        /** Not sure what this is */
         public final static String CONTENT_ITEM_TYPE = String.format("%s/%s", ContentResolver.CURSOR_ITEM_BASE_TYPE, "log");
 
         /** Column _id */
@@ -61,11 +63,17 @@ public class ActivityLog {
         public static final String[] ALL_COLS = {
             _ID, TYPE, TIME, CLIP, ITEM_COERCE, ITEM_CONTENT
         };
+        /** Column index of _id */
         public final static int          COL_ID_IDX           = 0;
+        /** Column index of act_type */
         public final static int          COL_TYPE_IDX         = 1;
+        /** Column index of act_time */
         public final static int          COL_TIME_IDX         = 2;
+        /** Column index of blocked_clip */
         public final static int          COL_CLIP_IDX         = 3;
+        /** Column index of blocked_item_coerce_text */
         public final static int          COL_ITEM_COERCE_IDX  = 4;
+        /** Column index of blocked_item_content */
         public final static int          COL_ITEM_CONTENT_IDX = 5;
 
         private static final String DB_NAME    = "clipblacklistlog.db";
@@ -194,7 +202,7 @@ public class ActivityLog {
 
     private Context mContext;
     
-    private static ActivityLog mInstance;
+    private static ActivityLog sInstance;
 
     private ActivityLog(Context context) {
         this.mContext = context.getApplicationContext();
@@ -206,11 +214,11 @@ public class ActivityLog {
      * @return the singleton instance
      */
     public static synchronized ActivityLog getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new ActivityLog(context);
+        if (sInstance == null) {
+            sInstance = new ActivityLog(context);
         }
         
-        return mInstance;
+        return sInstance;
     }
     
     /**
