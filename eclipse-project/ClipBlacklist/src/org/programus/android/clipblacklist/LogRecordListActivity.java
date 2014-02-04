@@ -2,6 +2,7 @@ package org.programus.android.clipblacklist;
 
 import org.programus.android.clipblacklist.data.LogRecord;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -66,9 +67,20 @@ public class LogRecordListActivity extends FragmentActivity implements LogRecord
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
             NavUtils.navigateUpFromSameTask(this);
+            this.animTransBack();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.animTransBack();
+    }
+    
+    private void animTransBack() {
+        this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
 
     /**
@@ -94,7 +106,7 @@ public class LogRecordListActivity extends FragmentActivity implements LogRecord
             Bundle extras = new Bundle();
             record.save(extras, LogRecordDetailFragment.ARG_ITEM_RECORD);
             detailIntent.putExtras(extras);
-            startActivity(detailIntent);
+            startActivity(detailIntent, ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_left).toBundle());
         }
     }
 }

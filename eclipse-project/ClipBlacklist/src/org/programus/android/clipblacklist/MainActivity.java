@@ -9,6 +9,7 @@ import org.programus.android.clipblacklist.service.ClipMonitorService;
 import org.programus.android.clipblacklist.util.ClipDataHelper;
 import org.programus.android.clipblacklist.widget.BlacklistAdapter;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.ListActivity;
@@ -331,7 +332,7 @@ public class MainActivity extends ListActivity implements ItemEditDialog.Finishe
     
     private void showLog() {
         Intent intent = new Intent(this, LogRecordListActivity.class);
-        this.startActivity(intent);
+        this.startActivity(intent, ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_left).toBundle());
     }
 
     @Override
