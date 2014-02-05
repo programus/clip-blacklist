@@ -77,6 +77,6 @@ public class LogRecordDetailFragment extends Fragment {
     private void fillClip(View v) {
         View clipDetail = v.findViewById(R.id.log_detail_clip);
         BlacklistItemDetail detail = new BlacklistItemDetail(clipDetail);
-        detail.setClipData(this.mRecord.getBlockedClip(), false);
+        detail.setClipData(this.mRecord.getBlockedClip(), false, true);
     }
 }

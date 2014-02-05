@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.Html;
+import android.text.Spanned;
 
 /**
  * Comparator for some classes.
@@ -146,7 +148,18 @@ public class Comparator {
     public static boolean equals(CharSequence a, CharSequence b) {
     	boolean ret = a == b;
     	if (!ret && a != null && b != null) {
-    		ret = a.toString().equals(b.toString());
+    	    boolean spannedA = a instanceof Spanned;
+    	    boolean spannedB = b instanceof Spanned;
+    	    if (spannedA && spannedB) {
+    	        // Html.fromHtml will switch tag orders when they appear together, so compare twice.
+    	        // Hope this works for more complex cases.
+    	        String htmlA1 = Html.toHtml((Spanned) a);
+    	        String htmlA2 = Html.toHtml(Html.fromHtml(htmlA1));
+    	        String htmlB = Html.toHtml((Spanned) b);
+    	        ret = htmlB.equals(htmlA1) || htmlB.equals(htmlA2);
+    	    } else if (!spannedA && !spannedB) {
+    	        ret = a.toString().equals(b.toString());
+    	    }
     	}
     	return ret;
     }

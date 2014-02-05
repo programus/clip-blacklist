@@ -1,10 +1,15 @@
 package org.programus.android.clipblacklist;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import org.programus.android.clipblacklist.data.LogRecord;
 import org.programus.android.clipblacklist.util.ActivityLog;
 import org.programus.android.clipblacklist.widget.LogListAdapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,8 +17,14 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 
 /**
@@ -78,6 +89,7 @@ public class LogRecordListFragment extends ListFragment implements LoaderManager
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        this.setHasOptionsMenu(true);
         if (this.mLog == null) {
             this.mLog = ActivityLog.getInstance(this.getActivity());
         }
@@ -116,6 +128,47 @@ public class LogRecordListFragment extends ListFragment implements LoaderManager
 
         // Reset the active callbacks interface to the dummy implementation.
         mCallbacks = sDummyCallbacks;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.log_list_context, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.action_delete_log:
+            deleteOldLog();
+            break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    
+    private void deleteOldLog() {
+        Calendar c = Calendar.getInstance();
+        View v = this.getActivity().getLayoutInflater().inflate(R.layout.date_time_picker, null);
+        final DatePicker datePicker = (DatePicker) v.findViewById(R.id.date_picker);
+        final TimePicker timePicker = (TimePicker) v.findViewById(R.id.time_picker);
+        datePicker.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), null);
+        timePicker.setCurrentHour(c.get(Calendar.HOUR_OF_DAY));
+        timePicker.setCurrentMinute(c.get(Calendar.MINUTE));
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+            .setView(v)
+            .setTitle(R.string.delete_date_before)
+            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Calendar c = new GregorianCalendar(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth(), timePicker.getCurrentHour(), timePicker.getCurrentMinute());
+                    int count = mLog.deleteLog(c.getTime());
+                    String fmt = getString(R.string.delete_result);
+                    Toast.makeText(getActivity(), String.format(fmt, count), Toast.LENGTH_LONG).show();
+                }
+            })
+            .setNegativeButton(android.R.string.cancel, null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override

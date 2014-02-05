@@ -5,6 +5,48 @@
     android:orientation="vertical" >
 
     <LinearLayout
+        android:id="@+id/clip_detail_description_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_input_area_background_color"
+            android:text="@string/clip_detail_description"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/clip_detail_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_detail_input_area_background_color"
+            android:paddingLeft="@dimen/clip_table_margin_h"
+            android:paddingRight="@dimen/clip_table_margin_h"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_input_area_background_color"
+            android:text="@string/clip_detail_mime"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/clip_detail_mime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/clip_detail_input_area_background_color"
+            android:paddingLeft="@dimen/clip_table_margin_h"
+            android:paddingRight="@dimen/clip_table_margin_h"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/clip_detail_coerce_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

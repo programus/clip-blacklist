@@ -4,6 +4,7 @@ import org.programus.android.clipblacklist.R;
 import org.programus.android.clipblacklist.data.BlacklistItem;
 
 import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
@@ -16,11 +17,14 @@ import android.widget.TextView;
  *
  */
 public class BlacklistItemDetail {
+    private ViewGroup mDescLayout;
     private ViewGroup mTextLayout;
     private ViewGroup mHtmlLayout;
     private ViewGroup mUriLayout;
     private ViewGroup mIntentLayout;
     private ViewGroup mCoerceLayout;
+    private TextView mDesc;
+    private TextView mMime;
     private TextView mText;
     private TextView mHtml;
     private TextView mUri;
@@ -36,12 +40,15 @@ public class BlacklistItemDetail {
     }
     
     private void init(View parent) {
+        this.mDescLayout = (ViewGroup) parent.findViewById(R.id.clip_detail_description_layout);
         this.mTextLayout = (ViewGroup) parent.findViewById(R.id.clip_detail_text_layout);
         this.mHtmlLayout = (ViewGroup) parent.findViewById(R.id.clip_detail_html_layout);
         this.mUriLayout = (ViewGroup) parent.findViewById(R.id.clip_detail_uri_layout);
         this.mIntentLayout = (ViewGroup) parent.findViewById(R.id.clip_detail_intent_layout);
         this.mCoerceLayout = (ViewGroup) parent.findViewById(R.id.clip_detail_coerce_layout);
         
+        this.mDesc = (TextView) parent.findViewById(R.id.clip_detail_description);
+        this.mMime = (TextView) parent.findViewById(R.id.clip_detail_mime);
         this.mText = (TextView) parent.findViewById(R.id.clip_detail_text);
         this.mHtml = (TextView) parent.findViewById(R.id.clip_detail_html);
         this.mUri = (TextView) parent.findViewById(R.id.clip_detail_uri);
@@ -50,11 +57,14 @@ public class BlacklistItemDetail {
     }
     
     private void clear() {
+        this.mDescLayout.setVisibility(View.GONE);
         this.mCoerceLayout.setVisibility(View.GONE);
         this.mTextLayout.setVisibility(View.GONE);
         this.mHtmlLayout.setVisibility(View.GONE);
         this.mUriLayout.setVisibility(View.GONE);
         this.mIntentLayout.setVisibility(View.GONE);
+        this.mDesc.setText("");
+        this.mMime.setText("");
         this.mCoerceText.setText("");
         this.mText.setText("");
         this.mHtml.setText("");
@@ -72,7 +82,7 @@ public class BlacklistItemDetail {
             this.mCoerceLayout.setVisibility(View.VISIBLE);
             this.mCoerceText.setText(item.getContent());
         } else {
-            this.setClipData(item.getRawContent(), false);
+            this.setClipData(item.getRawContent(), false, false);
         }
     }
     
@@ -80,8 +90,24 @@ public class BlacklistItemDetail {
      * Set a clip data to display
      * @param clip
      * @param isCoerceText
+     * @param showDescription 
      */
-    public void setClipData(ClipData clip, boolean isCoerceText) {
+    public void setClipData(ClipData clip, boolean isCoerceText, boolean showDescription) {
+        this.clear();
+        if (showDescription) {
+            this.mDescLayout.setVisibility(View.VISIBLE);
+            ClipDescription desc = clip.getDescription();
+            this.mDesc.setText(desc.getLabel());
+            StringBuilder sb = new StringBuilder();
+            int n = desc.getMimeTypeCount();
+            for (int i = 0; i < n; i++) {
+                sb.append(desc.getMimeType(i));
+                if (i < n - 1) {
+                    sb.append(",");
+                }
+            }
+            this.mMime.setText(sb);
+        }
         this.setItem(clip != null && clip.getItemCount() > 0 ? clip.getItemAt(0) : null, isCoerceText);
     }
     
@@ -91,7 +117,6 @@ public class BlacklistItemDetail {
      * @param isCoerceText
      */
     public void setItem(ClipData.Item item, boolean isCoerceText) {
-        this.clear();
         if (isCoerceText) {
             this.mCoerceLayout.setVisibility(View.VISIBLE);
             this.mCoerceText.setText(item.coerceToText(this.mCoerceText.getContext()));

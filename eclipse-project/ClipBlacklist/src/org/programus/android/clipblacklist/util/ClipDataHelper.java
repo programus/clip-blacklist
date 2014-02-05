@@ -6,6 +6,8 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.Html;
+import android.text.Spanned;
 
 
 /**
@@ -22,6 +24,8 @@ public class ClipDataHelper {
 	private final static int FLAG_NULL = -1;
 	
 	private final static int FLAG_INT = -2;
+	
+	private final static int FLAG_SPANNED = -3;
 	
 	/** Empty String array */
     public final static String[] EMPTY_STR_ARRAY = new String[0];
@@ -141,8 +145,14 @@ public class ClipDataHelper {
 	private static void append(StringBuilder sb, CharSequence... data) {
 		for (CharSequence d : data) {
 			if (d != null) {
-				int len = d.length();
-				sb.append(hexStringFromInt(len, NUM_LEN)).append(d);
+			    if (d instanceof Spanned) {
+			        String s = Html.toHtml((Spanned) d);
+			        sb.append(hexStringFromInt(FLAG_SPANNED, NUM_LEN));
+			        append(sb, s);
+			    } else {
+                    int len = d.length();
+                    sb.append(hexStringFromInt(len, NUM_LEN)).append(d);
+			    }
 			} else {
 				sb.append(hexStringFromInt(FLAG_NULL, NUM_LEN));
 			}
@@ -165,6 +175,10 @@ public class ClipDataHelper {
 	}
 	
 	private static CharSequence extract(StringBuilder data) {
+	    return extract(data, false);
+	}
+	
+	private static CharSequence extract(StringBuilder data, boolean isSpanned) {
 		CharSequence len = cut(data, 0, NUM_LEN);
 		int l = intFromHexString(len);
 		CharSequence ret = null;
@@ -172,8 +186,14 @@ public class ClipDataHelper {
 		case FLAG_NULL:
 			ret = null;
 			break;
+		case FLAG_SPANNED:
+		    ret = extract(data, true);
+		    break;
 		default:
 			ret = cut(data, 0, l);
+			if (isSpanned) {
+			    ret = Html.fromHtml(ret.toString());
+			}
 		}
 		return ret;
 	}
@@ -286,7 +306,7 @@ public class ClipDataHelper {
 		CharSequence prefix = extract(s);
 		ClipData.Item item = null;
 		if (prefix != null) {
-			item = new ClipData.Item(toString(extract(s)), toString(extract(s)), intentFromString(s), uriFromString(s));
+			item = new ClipData.Item((extract(s)), toString(extract(s)), intentFromString(s), uriFromString(s));
 		}
 		return item;
 	}

@@ -1,5 +1,7 @@
 package org.programus.android.clipblacklist.util;
 
+import java.util.Date;
+
 import org.programus.android.clipblacklist.data.BlacklistItem;
 import org.programus.android.clipblacklist.data.LogRecord;
 
@@ -246,6 +248,15 @@ public class ActivityLog {
      */
     public CursorLoader newCursorLoaderForAllLog() {
         return new CursorLoader(this.mContext, ClipBlacklistLogProvider.CONTENT_URI, ClipBlacklistLogProvider.ALL_COLS, null, null, String.format("%s %s", ClipBlacklistLogProvider.TIME, "DESC"));
+    }
+    
+    /**
+     * Delete log before specified date (not include the date).
+     * @param before
+     * @return the number of deleted records
+     */
+    public int deleteLog(Date before) {
+        return this.mContext.getContentResolver().delete(ClipBlacklistLogProvider.CONTENT_URI, String.format("%s < %d", ClipBlacklistLogProvider.TIME, before.getTime()), null);
     }
     
     /**

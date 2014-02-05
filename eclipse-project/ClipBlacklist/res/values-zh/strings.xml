@@ -9,7 +9,7 @@
     <string name="action_off">关</string>
     <string name="action_delete">删除</string>
     <string name="action_edit">编辑</string>
-    <string name="prompt_add_item">在此追加你不希望进入剪贴板的内容。</string>
+    <string name="prompt_add_item">点击[+]按钮在此追加您不希望进入剪贴板的内容。</string>
     <string name="action_sel_all">全选</string>
     <string name="dialog_prompt">剪贴板黑名单内容</string>
     <string name="dialog_item_enabled_prompt">阻止如下内容进入剪贴板</string>
@@ -38,10 +38,9 @@
     <string name="clip_data_intent_prompt_short">I</string>
     <string name="clip_data_coerce_prompt">强制转化成的文本</string>
     <string name="clip_data_details_prompt">剪贴板详细数据</string>
-    <string name="log_time_format">yyyy\nMMM dd\nHH:mm:ss</string>
+    <string name="log_time_format">yyyy年\nMM月dd日\nHH:mm:ss</string>
     <string name="title_logrecord_list">日志记录列表</string>
     <string name="title_logrecord_detail">日志详细记录</string>
-    <string name="log_detail_time_format">yyyy-MM-dd HH:mm:ss.SSS</string>
     <string name="log_detail_item_prompt">触发事件的黑名单项目</string>
     <string name="log_detail_item_coerce_true">强制转化为文本</string>
     <string name="log_detail_item_coerce_false">剪贴板详细内容</string>
@@ -51,5 +50,9 @@
     <string name="clip_data_intent_prompt">Intent</string>
     <string name="log_detail_clip_prompt">阻止掉的剪贴板信息</string>
     <string name="empty_log">暂无日志</string>
-
+    <string name="clip_detail_description">剪贴板描述</string>
+    <string name="clip_detail_mime">MIME类型</string>
+    <string name="delete_date_before">删除早于（不包括）如下时间的日志：</string>
+    <string name="action_delete_log">删除旧日志&#8230;</string>
+    <string name="delete_result">%d条日志已删除</string>
 </resources>

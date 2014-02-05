@@ -38,10 +38,10 @@
     <string name="clip_data_intent_prompt_short">I</string>
     <string name="clip_data_coerce_prompt">Coerce To Text</string>
     <string name="clip_data_details_prompt">ClipData Details</string>
-    <string name="log_time_format">yyyy\nMMM dd\nHH:mm:ss</string>
+    <string name="log_time_format">MMM dd,\nyyyy\nHH:mm:ss</string>
     <string name="title_logrecord_list">Log Records</string>
     <string name="title_logrecord_detail">Log Record Detail</string>
-    <string name="log_detail_time_format">yyyy-MM-dd HH:mm:ss.SSS</string>
+    <string name="log_detail_time_format">yyyy-MM-dd HH:mm:ss.SSS (Z/zzzz)</string>
     <string name="log_detail_item_prompt">Trigger Item</string>
     <string name="log_detail_item_coerce_true">Coerce To Text</string>
     <string name="log_detail_item_coerce_false">ClipData Detail</string>
@@ -51,5 +51,9 @@
     <string name="clip_data_intent_prompt">Intent</string>
     <string name="log_detail_clip_prompt">Blocked Clip Item</string>
     <string name="empty_log">No activity log</string>
-
+    <string name="clip_detail_description">Description</string>
+    <string name="clip_detail_mime">MIME Types</string>
+    <string name="action_delete_log">Delete old log&#8230;</string>
+    <string name="delete_date_before">Delete log records before (not include):</string>
+    <string name="delete_result">%d log record(s) deleted.</string>
 </resources>

@@ -51,8 +51,6 @@ public class LogRecordListActivity extends FragmentActivity implements LogRecord
             // 'activated' state when touched.
             ((LogRecordListFragment) getSupportFragmentManager().findFragmentById(R.id.logrecord_list)).setActivateOnItemClick(true);
         }
-
-        // TODO: If exposing deep links into your app, handle intents here.
     }
 
     @Override
