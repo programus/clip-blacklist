@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <CheckBoxPreference android:key="@string/settings_key_notice" android:title="@string/settings_block_notice_title" android:summaryOff="@string/settings_block_notice_off" android:summaryOn="@string/settings_block_notice_on" android:defaultValue="@bool/settings_block_notice_default_value"/>
+    
+
+</PreferenceScreen>

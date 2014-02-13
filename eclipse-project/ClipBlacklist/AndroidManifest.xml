@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="16" />
+        android:targetSdkVersion="19" />
 
     <application
         android:allowBackup="true"
@@ -49,6 +49,9 @@
                 android:value=".LogRecordListActivity" />
         </activity>
         <provider android:multiprocess="true" android:authorities="org.programus.android.clipblacklist.util.ActivityLog.ClipBlacklistLogProvider" android:name=".util.ActivityLog$ClipBlacklistLogProvider"></provider>
+        <activity android:name="SettingsActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="org.programus.android.clipblacklist.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>

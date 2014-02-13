@@ -56,4 +56,10 @@
     <string name="action_delete_log">Delete old log&#8230;</string>
     <string name="delete_date_before">Delete log records before (not include):</string>
     <string name="delete_result">%d log record(s) deleted.</string>
+    <string name="settings_block_notice_on">Display message when block clipboard.</string>
+    <string name="settings_block_notice_off">Keep silence when blocking clipboard</string>
+    <string name="settings_key_notice">pref.key.block_notice</string>
+    <string name="settings_block_notice_title">Block Notice</string>
+    <string name="settings_block_notice_message_prefix">ClipData [</string>
+    <string name="settings_block_notice_message_suffix">] blocked!</string>
 </resources>

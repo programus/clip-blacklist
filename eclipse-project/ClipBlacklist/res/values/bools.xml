@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="bool" name="settings_block_notice_default_value" format="boolean">true</item>
+    
+</resources>

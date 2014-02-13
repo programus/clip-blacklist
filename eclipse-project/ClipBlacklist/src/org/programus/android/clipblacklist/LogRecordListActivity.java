@@ -1,8 +1,8 @@
 package org.programus.android.clipblacklist;
 
 import org.programus.android.clipblacklist.data.LogRecord;
+import org.programus.android.clipblacklist.util.AnimUtil;
 
-import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -65,7 +65,7 @@ public class LogRecordListActivity extends FragmentActivity implements LogRecord
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
             NavUtils.navigateUpFromSameTask(this);
-            this.animTransBack();
+            AnimUtil.transBack(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -74,13 +74,9 @@ public class LogRecordListActivity extends FragmentActivity implements LogRecord
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        this.animTransBack();
+        AnimUtil.transBack(this);
     }
     
-    private void animTransBack() {
-        this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
-    }
-
     /**
      * Callback method from {@link LogRecordListFragment.Callbacks} indicating
      * that the item with the given ID was selected.
@@ -104,7 +100,7 @@ public class LogRecordListActivity extends FragmentActivity implements LogRecord
             Bundle extras = new Bundle();
             record.save(extras, LogRecordDetailFragment.ARG_ITEM_RECORD);
             detailIntent.putExtras(extras);
-            startActivity(detailIntent, ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_left, R.anim.slide_out_left).toBundle());
+            startActivity(detailIntent, AnimUtil.getTransFwdBundle(this));
         }
     }
 }

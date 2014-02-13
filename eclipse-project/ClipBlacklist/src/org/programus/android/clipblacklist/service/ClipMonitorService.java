@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.programus.android.clipblacklist.MainActivity;
+import org.programus.android.clipblacklist.R;
 import org.programus.android.clipblacklist.data.BlacklistItem;
 import org.programus.android.clipblacklist.util.ActivityLog;
 import org.programus.android.clipblacklist.util.ClipDataHelper;
@@ -20,9 +21,16 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * The service to monitor the clipboard change.
@@ -109,6 +117,25 @@ public class ClipMonitorService extends Service {
         				ret = true;
         			}
         			if (ret) {
+        			    boolean needNotice = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(this.getString(R.string.settings_key_notice), this.getResources().getBoolean(R.bool.settings_block_notice_default_value));
+        			    if (needNotice) {
+        			        String prefix = this.getString(R.string.settings_block_notice_message_prefix);
+        			        String suffix = this.getString(R.string.settings_block_notice_message_suffix);
+        			        Toast toast = Toast.makeText(this, prefix, Toast.LENGTH_SHORT);
+        			        CharSequence cs = item.coerceToText(this);
+        			        View v = toast.getView();
+        			        ArrayList<View> views = new ArrayList<View>(1);
+        			        v.findViewsWithText(views, prefix, View.FIND_VIEWS_WITH_TEXT);
+        			        if (views.size() == 1) {
+        			            TextView tv = (TextView) views.get(0);
+        			            WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+        			            Point size = new Point();
+        			            wm.getDefaultDisplay().getSize(size);
+        			            cs = TextUtils.ellipsize(cs, tv.getPaint(), size.x * 3, TextUtils.TruncateAt.END);
+        			        }
+        			        toast.setText(TextUtils.concat(prefix, cs, suffix));
+        			        toast.show();
+        			    }
         			    this.log.block(cd, bi);
         			    break;
         			}

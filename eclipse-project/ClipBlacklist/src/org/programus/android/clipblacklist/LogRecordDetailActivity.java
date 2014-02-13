@@ -1,5 +1,7 @@
 package org.programus.android.clipblacklist;
 
+import org.programus.android.clipblacklist.util.AnimUtil;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -56,7 +58,7 @@ public class LogRecordDetailActivity extends FragmentActivity {
             // http://developer.android.com/design/patterns/navigation.html#up-vs-back
             //
             NavUtils.navigateUpTo(this, new Intent(this, LogRecordListActivity.class));
-            this.animTransBack();
+            AnimUtil.transBack(this);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -65,10 +67,7 @@ public class LogRecordDetailActivity extends FragmentActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        this.animTransBack();
+        AnimUtil.transBack(this);
     }
     
-    private void animTransBack() {
-        this.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
-    }
 }
