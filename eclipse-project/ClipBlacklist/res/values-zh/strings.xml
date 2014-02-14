@@ -55,4 +55,9 @@
     <string name="delete_date_before">删除早于（不包括）如下时间的日志：</string>
     <string name="action_delete_log">删除旧日志&#8230;</string>
     <string name="delete_result">%d条日志已删除</string>
+    <string name="settings_block_notice_on">阻止剪贴板内容时显示信息。</string>
+    <string name="settings_block_notice_off">默默地阻止剪贴板内容。</string>
+    <string name="settings_block_notice_title">阻止通知</string>
+    <string name="settings_block_notice_message_prefix">剪贴板内容 [</string>
+    <string name="settings_block_notice_message_suffix">] 已被阻止！</string>
 </resources>
